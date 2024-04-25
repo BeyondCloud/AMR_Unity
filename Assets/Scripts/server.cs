@@ -27,11 +27,11 @@ public class SimpleHttpServer : MonoBehaviour
         try
         {
             listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:8080/"); // Ensure this is correct
+            listener.Prefixes.Add("http://localhost:8000/"); // Ensure this is correct
             listener.Start();
             isRunning = true;
             Listen();
-            Debug.Log("Server started on http://localhost:8080/");
+            Debug.Log("Server started on http://localhost:8000/");
         }
         catch (Exception e)
         {
