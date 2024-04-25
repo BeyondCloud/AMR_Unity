@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum PlacesEmum
+
+public class Navigation : MonoBehaviour
 {
-    kitchen=0,
-    livingRoom=1,
-    bathroom=2
-}
-public class NavigationScript : MonoBehaviour
-{
+    public enum PlacesEmum
+    {
+        stay =0,
+        kitchen=1,
+        livingRoom=2,
+        bathroom=3
+    }
     public PlacesEmum places;
     // Start is called before the first frame update
     public Transform kitchen;

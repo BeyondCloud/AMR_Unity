@@ -6,12 +6,15 @@ using UnityEngine;
 
 public class SimpleHttpServer : MonoBehaviour
 {
+    public GameObject player;
+    private Navigation platerNavigation;
     private HttpListener listener;
     private bool isRunning = false;
 
     void Start()
     {
         StartServer();
+        platerNavigation = player.GetComponent<Navigation>();
     }
 
     void OnApplicationQuit()
@@ -54,17 +57,17 @@ public class SimpleHttpServer : MonoBehaviour
         {
             switch (request.Url.AbsolutePath)
             {
-                case "/my_function":
+                case "/goto":
                     HandleMyFunction(request, response);
                     break;
                 default:
-                    SendResponse(response, "<HTML><BODY>404 Not Found</BODY></HTML>", 404);
+                    SendResponse(response, "404 Not Found", 404);
                     break;
             }
         }
         else
         {
-            SendResponse(response, "<HTML><BODY> Hello world! Only POST /my_function is supported.</BODY></HTML>", 200);
+            SendResponse(response, " Only POST /goto is supported.</BODY></HTML>", 200);
         }
 
         // Continue listening for incoming requests
@@ -73,15 +76,28 @@ public class SimpleHttpServer : MonoBehaviour
 
     private void HandleMyFunction(HttpListenerRequest request, HttpListenerResponse response)
     {
-        // Process POST data for /my_function
+        // Process POST data for /goto
         using (StreamReader reader = new StreamReader(request.InputStream, request.ContentEncoding))
         {
             string postData = reader.ReadToEnd();
-            Debug.Log($"Received POST data at /my_function: {postData}");
-
+            Debug.Log($"Received POST data at /goto: {postData}");
+            switch (postData.ToLower())
+            {
+                case "kitchen":
+                    platerNavigation.places = Navigation.PlacesEmum.kitchen;
+                    break;
+                case "livingroom":
+                    platerNavigation.places = Navigation.PlacesEmum.livingRoom;
+                    break;
+                case "bathroom":
+                    platerNavigation.places = Navigation.PlacesEmum.bathroom;
+                    break;
+                default:
+                    break;
+            }
             // Process postData here as needed
 
-            string responseString = $"/my_function: {postData}";
+            string responseString = $"/goto: {postData}";
             SendResponse(response, responseString, 200);
         }
     }
