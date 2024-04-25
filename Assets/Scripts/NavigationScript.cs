@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum PlacesEmum
+{
+    kitchen=0,
+    livingRoom=1,
+    bathroom=2
+}
 public class NavigationScript : MonoBehaviour
 {
+    public PlacesEmum places;
     // Start is called before the first frame update
-    public Transform target;
+    public Transform kitchen;
+    public Transform livingRoom;
+    public Transform bathroom;
     private NavMeshAgent agent;
     void Start()
     {
@@ -16,6 +25,11 @@ public class NavigationScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        agent.destination = target.position;
+        if(places == PlacesEmum.kitchen)
+            agent.destination = kitchen.position;
+        else if(places == PlacesEmum.livingRoom)
+            agent.destination = livingRoom.position;
+        else if(places == PlacesEmum.bathroom)
+            agent.destination = bathroom.position;
     }
 }
