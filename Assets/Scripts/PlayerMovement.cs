@@ -24,7 +24,7 @@ public class PlayerMovementTutorial : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    bool grounded;
+    // bool grounded;
 
     public Transform orientation;
 
@@ -46,7 +46,7 @@ public class PlayerMovementTutorial : MonoBehaviour
     private void Update()
     {
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
+        // grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
         MyInput();
         SpeedControl();
@@ -79,27 +79,27 @@ public class PlayerMovementTutorial : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
-    public bool canJump = false;
+    public bool grounded = false;
     // private void OnCollisionEnter(Collision collision)
     // {
-    //     if (canJump == false)
+    //     if (grounded == false)
     //     {
-    //         canJump = true;
+    //         grounded = true;
     //     }
     // }
     private void OnCollisionStay(Collision collision)
     {
-        if (canJump == false)
+        if (grounded == false)
         {
-            canJump = true;
+            grounded = true;
         }
     }
  
     private void OnCollisionExit(Collision collision)
     {
-        if(canJump == true) // this triggers only if the ball is not touching the ground anymore
+        if(grounded == true) // this triggers only if the ball is not touching the ground anymore
         {
-            canJump = false;
+            grounded = false;
         }
     }
     private void MovePlayer()
@@ -108,7 +108,7 @@ public class PlayerMovementTutorial : MonoBehaviour
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         // on ground
-        if(canJump)
+        if(grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
         // in air
