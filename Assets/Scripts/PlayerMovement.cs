@@ -79,8 +79,15 @@ public class PlayerMovementTutorial : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
-    bool canJump = false;
-    private void OnCollisionEnter(Collision collision)
+    public bool canJump = false;
+    // private void OnCollisionEnter(Collision collision)
+    // {
+    //     if (canJump == false)
+    //     {
+    //         canJump = true;
+    //     }
+    // }
+    private void OnCollisionStay(Collision collision)
     {
         if (canJump == false)
         {
