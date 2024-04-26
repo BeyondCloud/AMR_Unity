@@ -11,6 +11,13 @@ public class SimpleHttpServer : MonoBehaviour
     private HttpListener listener;
     private bool isRunning = false;
 
+    // public string url = "http://localhost:8000/";
+    private string url = "http://192.168.254.22:8000/";
+    // private string url = "http://0.0.0.0:8000/";
+    
+    // private string url = "http://36.228.19.33:8000/";
+    
+
     void Start()
     {
         StartServer();
@@ -27,11 +34,11 @@ public class SimpleHttpServer : MonoBehaviour
         try
         {
             listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:8000/"); // Ensure this is correct
+            listener.Prefixes.Add(url); // Ensure this is correct
             listener.Start();
             isRunning = true;
             Listen();
-            Debug.Log("Server started on http://localhost:8000/");
+            Debug.Log("Server started on /" + url);
         }
         catch (Exception e)
         {
@@ -58,7 +65,10 @@ public class SimpleHttpServer : MonoBehaviour
             switch (request.Url.AbsolutePath)
             {
                 case "/goto":
-                    HandleMyFunction(request, response);
+                    Goto(request, response);
+                    break;
+                case "/go_forward":
+                    GoForward();
                     break;
                 default:
                     SendResponse(response, "404 Not Found", 404);
@@ -74,7 +84,7 @@ public class SimpleHttpServer : MonoBehaviour
         Listen();
     }
 
-    private void HandleMyFunction(HttpListenerRequest request, HttpListenerResponse response)
+    private void Goto(HttpListenerRequest request, HttpListenerResponse response)
     {
         // Process POST data for /goto
         using (StreamReader reader = new StreamReader(request.InputStream, request.ContentEncoding))
@@ -101,7 +111,10 @@ public class SimpleHttpServer : MonoBehaviour
             SendResponse(response, responseString, 200);
         }
     }
-
+    private void GoForward()
+    {
+        
+    }
     private void SendResponse(HttpListenerResponse response, string responseString, int statusCode)
     {
         byte[] buffer = Encoding.UTF8.GetBytes(responseString);
