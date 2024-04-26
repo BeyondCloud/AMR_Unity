@@ -24,5 +24,9 @@ public class DropDown : MonoBehaviour
         {
             playerController.SpinRight();
         }
+        else if (val == 4)
+        {
+            playerController.gotoKitchen();
+        }
     }
 }

@@ -39,4 +39,20 @@ public class Navigation : MonoBehaviour
         else if(places == PlacesEmum.bedroom)
             agent.destination = bedroom.position;
     }
+    public void GoToKitchen()
+    {
+        places = PlacesEmum.kitchen;
+    }
+    public void GoToLivingRoom()
+    {
+        places = PlacesEmum.livingRoom;
+    }
+    public void GoToBathroom()
+    {
+        places = PlacesEmum.bathroom;
+    }
+    public void GoToBedroom()
+    {
+        places = PlacesEmum.bedroom;
+    }
 }

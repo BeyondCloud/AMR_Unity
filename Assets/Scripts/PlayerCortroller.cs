@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.AI;
 
 public class PlayerController: MonoBehaviour
 {
@@ -37,6 +37,7 @@ public class PlayerController: MonoBehaviour
 
     public float airMultiplier;
 
+
     [HideInInspector] public float walkSpeed;
     [HideInInspector] public float sprintSpeed;
 
@@ -54,10 +55,13 @@ public class PlayerController: MonoBehaviour
     Vector3 moveDirection;
 
     Rigidbody rb;
-
+    private NavMeshAgent agent;
+    private Navigation navigation;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        agent = GetComponent<NavMeshAgent>();
+        navigation = GetComponent<Navigation>();
     }
 
     private void Update()
@@ -138,6 +142,7 @@ public class PlayerController: MonoBehaviour
     }
     public void Stop()
     {
+        agent.isStopped = true;
         verticalInput = 0;
         horizontalInput = 0;
         spin_direction = 0;
@@ -147,4 +152,12 @@ public class PlayerController: MonoBehaviour
         Stop();
         spin_direction = 1;
     }
+
+    public void gotoKitchen()
+    {
+        Stop();
+        agent.isStopped = false;
+        navigation.GoToKitchen();
+    }
+
 }
