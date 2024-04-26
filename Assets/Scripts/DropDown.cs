@@ -8,9 +8,21 @@ public class DropDown : MonoBehaviour
     public PlayerController playerController;
     public void HandleInputData(int val)
     {
-        if (val == 1)
+        if (val == 0)
+        {
+            playerController.Stop();
+        }
+        else if (val == 1)
         {
             playerController.GoForward();
+        }
+        else if (val == 2)
+        {
+            playerController.GoBack();
+        }
+        else if (val == 3)
+        {
+            playerController.SpinRight();
         }
     }
 }

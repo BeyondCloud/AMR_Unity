@@ -5,60 +5,32 @@ using TMPro;
 
 public class PlayerController: MonoBehaviour
 {
-    public enum Cmd
-    {
-        idle = 0,
-        go_forward =1,
-        go_back =2,
-        go_right =3,
-        go_left =4,
-        go_crowded =5,
-        go_charge =6,
-        spin_right =7,
-        spin_left =8,
-        follow =9,
-        echo_seen_object =10,
-        find =11,
-        get_battery_percentage =12,
-        dance =13,
-        get_speed =14,
-        set_speed =15,
-        stop =16,
-        print=17,
-        error=18
-    }
-    private Cmd _cmd; // Private backing field
+    // public enum Cmd
+    // {
+    //     idle = 0,
+    //     go_forward =1,
+    //     go_back =2,
+    //     go_right =3,
+    //     go_left =4,
+    //     go_crowded =5,
+    //     go_charge =6,
+    //     spin_right =7,
+    //     spin_left =8,
+    //     follow =9,
+    //     echo_seen_object =10,
+    //     find =11,
+    //     get_battery_percentage =12,
+    //     dance =13,
+    //     get_speed =14,
+    //     set_speed =15,
+    //     stop =16,
+    //     print=17,
+    //     error=18
+    // }
 
-    private void HandleControlChange(Cmd newControl)
-    {
-        switch (newControl)
-        {
-            case Cmd.idle:
-                break;
-            case Cmd.go_forward:
-                GoForward();
-                break;
-
-        }
-    }
-
-    public Cmd control
-    {
-        get { return _cmd; }
-        set
-        {
-            if (_cmd != value) // Only if the value has changed
-            {
-                _cmd = value;
-                HandleControlChange(_cmd);
-                Debug.Log(_cmd);
-            }
-        }
-    }
-
-    public Cmd cmd;
     [Header("Movement")]
-    
+    public float spin_direction=0;
+    private float spin_speed=100;
     public float moveSpeed;
 
     public float groundDrag;
@@ -86,7 +58,6 @@ public class PlayerController: MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
     }
 
     private void Update()
@@ -100,9 +71,11 @@ public class PlayerController: MonoBehaviour
             rb.drag = 0;
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         MovePlayer();
+        SpinPlayer();
+
     }
 
     public bool grounded = false;
@@ -134,7 +107,14 @@ public class PlayerController: MonoBehaviour
         else
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
     }
-
+    private void SpinPlayer()
+    {
+        // calculate movement direction
+        if(spin_direction != 0)
+        {
+            transform.Rotate(0, spin_direction * spin_speed*Time.deltaTime, 0,Space.Self);
+        }
+    }
     private void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -148,12 +128,23 @@ public class PlayerController: MonoBehaviour
     }
     public void GoForward()
     {
-        ResetForce();
+        Stop();
         verticalInput = 1;
     }
-    private void ResetForce()
+    public void GoBack()
+    {
+        Stop();
+        verticalInput = -1;
+    }
+    public void Stop()
     {
         verticalInput = 0;
         horizontalInput = 0;
+        spin_direction = 0;
+    }
+    public void SpinRight()
+    {
+        Stop();
+        spin_direction = 1;
     }
 }

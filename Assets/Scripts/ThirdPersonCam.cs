@@ -33,9 +33,9 @@ public class ThirdPersonCameraController : MonoBehaviour
         // Update player's rotation to match the camera's rotation on the Y-axis
         Vector3 forward = transform.forward;
         forward.y = 0; // Keep the player vertical
-        if (forward.magnitude > 0)
-        {
-            player.rotation = Quaternion.LookRotation(forward);
-        }
+        // if (forward.magnitude > 0)
+        // {
+        //     player.rotation = Quaternion.LookRotation(forward);
+        // }
     }
 }
