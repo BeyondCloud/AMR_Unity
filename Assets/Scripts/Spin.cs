@@ -3,7 +3,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Tmp : MonoBehaviour
+public class Spin : MonoBehaviour
 {
     void FixedUpdate()
     {

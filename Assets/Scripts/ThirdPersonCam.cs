@@ -1,6 +1,7 @@
 using UnityEngine;
 public class ThirdPersonCameraController : MonoBehaviour
 {
+    public Transform cameraTransform;
     public Transform player; // Player's Transform
     public float distance = 5.0f; // Distance from the player
     public float currentX = 0.0f;
@@ -27,15 +28,7 @@ public class ThirdPersonCameraController : MonoBehaviour
     {
         Vector3 dir = new Vector3(0, 0, -distance);
         Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-        transform.position = player.position + rotation * dir;
-        transform.LookAt(player.position);
-
-        // Update player's rotation to match the camera's rotation on the Y-axis
-        Vector3 forward = transform.forward;
-        forward.y = 0; // Keep the player vertical
-        // if (forward.magnitude > 0)
-        // {
-        //     player.rotation = Quaternion.LookRotation(forward);
-        // }
+        cameraTransform.position = player.position + rotation * dir;
+        cameraTransform.LookAt(player.position);
     }
 }

@@ -12,7 +12,7 @@ public class SimpleHttpServer : MonoBehaviour
     private bool isRunning = false;
 
     // public string url = "http://localhost:8000/";
-    private string url = "http://192.168.254.22:8000/";
+    private string url = "http://192.168.0.225:8000/";
     // private string url = "http://0.0.0.0:8000/";
     
     // private string url = "http://36.228.19.33:8000/";

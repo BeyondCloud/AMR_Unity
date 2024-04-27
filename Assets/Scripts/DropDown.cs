@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DropDown : MonoBehaviour
 {
-    public PlayerController playerController;
+    public PlayerFunctionCortroller playerController;
     public void HandleInputData(int val)
     {
         if (val == 0)
