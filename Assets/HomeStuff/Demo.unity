@@ -1269,7 +1269,7 @@ Transform:
   m_GameObject: {fileID: 551184240}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -9.61, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2400,6 +2400,10 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: go_back
       m_Image: {fileID: 0}
+    - m_Text: spin_right
+      m_Image: {fileID: 0}
+    - m_Text: goto_kitchen
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2897,11 +2901,12 @@ GameObject:
   - component: {fileID: 1223174446}
   - component: {fileID: 1223174450}
   - component: {fileID: 1223174448}
+  - component: {fileID: 1223174451}
   - component: {fileID: 1223174449}
   - component: {fileID: 1223174441}
   - component: {fileID: 1223174447}
   m_Layer: 0
-  m_Name: Cleaner
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2954,7 +2959,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 38df50251b714ba4580b6887e3eeaf1a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3018,6 +3023,7 @@ MonoBehaviour:
   jumpForce: 2000
   jumpCooldown: 0.9
   airMultiplier: 0.03
+  readyToJump: 0
   walkSpeed: 0
   sprintSpeed: 0
   jumpKey: 32
@@ -3074,7 +3080,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223174440}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
   m_Speed: 3.5
@@ -3101,7 +3107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08663ba143e26f7439a0581ddf157dc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cmd: 0
+  spin_direction: 0
   moveSpeed: 400
   groundDrag: 7
   airMultiplier: 0.03
@@ -3113,6 +3119,20 @@ MonoBehaviour:
     m_Bits: 1024
   orientation: {fileID: 1531676991}
   grounded: 0
+--- !u!114 &1223174451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223174440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d28e4cd014ee624ab974bc0311f0b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraController: {fileID: 551184243}
+  cameraTransform: {fileID: 551184242}
 --- !u!1 &1227221018
 GameObject:
   m_ObjectHideFlags: 0
