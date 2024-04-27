@@ -1,15 +1,22 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
+/*
+- Main Object (attach script to this object)
+    - Main Camera
+    - target (FollowTargetCam)
+*/
 public class FollowTargetCam : MonoBehaviour
 {
     private float distance;
-    //　To initialize the target,
-    // create an empty GameObject and attach the target
-    //[;]
+    /*
+      To initialize the target,
+      create an empty GameObject and attach the target
+      Do not attach to main object directly
+      otherwise, the camera will not spin correctly
+    */
     public Transform target;
     public Transform cameraTransform;
-    public bool allow_mouse_view_spin = false;
 
     public Vector3 offset; // Offset of the camera from the target
     private float currentX = 0.0f;
@@ -24,14 +31,15 @@ public class FollowTargetCam : MonoBehaviour
         distance = Vector3.Distance(cameraTransform.position, target.position);
         // currentY = cameraTransform.position.y - target.position.y;
     }
-    void Update()
+    private void Update()
     {
         transform.rotation = target.rotation;
-        if (allow_mouse_view_spin  && Input.GetMouseButton(1)) // Right mouse button
+        if (Input.GetMouseButton(1)) // Right mouse button
         {
             currentX += Input.GetAxis("Mouse X") * sensitivityX;
             currentY -= Input.GetAxis("Mouse Y") * sensitivityY;
             currentY = Mathf.Clamp(currentY, MIN_ANGLE, MAX_ANGLE);
+            // Debug.Log("currentX: " + currentX + " currentY: " + currentY);
         }
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
@@ -40,9 +48,12 @@ public class FollowTargetCam : MonoBehaviour
     }
     void LateUpdate()
     {  
-        Vector3 dir = new Vector3(0, 0, -distance);
-        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-        cameraTransform.position = target.position + rotation * dir;
+        if (Input.GetMouseButton(1))
+        {
+            Vector3 dir = new Vector3(0, 0, -distance);
+            Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+            cameraTransform.position = target.position + rotation * dir;
+        }
         cameraTransform.LookAt(target.position);
     }
 }

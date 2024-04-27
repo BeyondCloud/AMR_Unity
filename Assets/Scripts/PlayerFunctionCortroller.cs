@@ -142,6 +142,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
     }
     public void Stop()
     {
+        navigation.SetIdle();
         verticalInput = 0;
         horizontalInput = 0;
         spin_direction = 0;

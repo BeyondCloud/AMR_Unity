@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,7 +9,7 @@ public class Navigation : MonoBehaviour
 {
     public enum PlacesEmum
     {
-        stay =0,
+        idle =0,
         kitchen=1,
         livingRoom=2,
         bathroom=3,
@@ -30,14 +31,28 @@ public class Navigation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(places == PlacesEmum.kitchen)
-            agent.destination = kitchen.position;
-        else if(places == PlacesEmum.livingRoom)
-            agent.destination = livingRoom.position;
-        else if(places == PlacesEmum.bathroom)
-            agent.destination = bathroom.position;
-        else if(places == PlacesEmum.bedroom)
-            agent.destination = bedroom.position;
+        switch (places)
+        {
+            case PlacesEmum.idle:
+                agent.ResetPath();
+                break;
+            case PlacesEmum.kitchen:
+                agent.destination = kitchen.position;
+                break;
+            case PlacesEmum.livingRoom:
+                agent.destination = livingRoom.position;
+                break;
+            case PlacesEmum.bathroom:
+                agent.destination = bathroom.position;
+                break;
+            case PlacesEmum.bedroom:
+                agent.destination = bedroom.position;
+                break;
+        }
+    }
+    public void SetIdle()
+    {
+        places = PlacesEmum.idle;
     }
     public void GoToKitchen()
     {
