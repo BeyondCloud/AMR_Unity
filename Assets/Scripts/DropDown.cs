@@ -8,25 +8,26 @@ public class DropDown : MonoBehaviour
     public PlayerFunctionCortroller playerController;
     public void HandleInputData(int val)
     {
-        if (val == 0)
+        switch (val)
         {
-            playerController.Stop();
-        }
-        else if (val == 1)
-        {
-            playerController.GoForward();
-        }
-        else if (val == 2)
-        {
-            playerController.GoBack();
-        }
-        else if (val == 3)
-        {
-            playerController.SpinRight();
-        }
-        else if (val == 4)
-        {
-            playerController.gotoKitchen();
+            case 0:
+                playerController.Stop();
+                break;
+            case 1:
+                playerController.GoForward();
+                break;
+            case 2:
+                playerController.GoBack();
+                break;
+            case 3:
+                playerController.SpinRight();
+                break;
+            case 4:
+                playerController.SpinLeft();
+                break;
+            case 5:
+                playerController.gotoKitchen();
+                break;
         }
     }
 }

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.AI;
 
 public class PlayerKeyboardController : MonoBehaviour
@@ -27,15 +24,15 @@ public class PlayerKeyboardController : MonoBehaviour
     public LayerMask whatIsGround;
     // bool grounded;
 
-    public Transform orientation;
+    public Transform thirdPersonCam;
+
 
     float horizontalInput;
     float verticalInput;
-
-    Vector3 moveDirection;
-
     Rigidbody rb;
     private NavMeshAgent agent;
+
+    
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -78,7 +75,6 @@ public class PlayerKeyboardController : MonoBehaviour
             //     Debug.LogError("Cannot jump when Agent is applied!");
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
-
         }
     }
     public bool grounded = false;
@@ -107,7 +103,11 @@ public class PlayerKeyboardController : MonoBehaviour
     private void MovePlayer()
     {
         // calculate movement direction
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        Vector3 moveDirection = thirdPersonCam.position - transform.position;
+        moveDirection.y = 0;
+        Quaternion rotation = Quaternion.Euler(0,90,0);
+        Vector3 moveDirectionNormal = rotation * moveDirection;
+        moveDirection = - moveDirection * verticalInput - moveDirectionNormal * horizontalInput;
 
         // on ground
         if(grounded)
@@ -116,7 +116,22 @@ public class PlayerKeyboardController : MonoBehaviour
         // in air
         else
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        
     }
+    // private void MovePlayer()
+    // {
+    //     float rotationSpeed = 3.0f;
+    //     float moveSpeed = 4.0f;
+    //     Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
+    //     movementDirection.Normalize();
+    //     transform.Translate(movementDirection * moveSpeed * Time.deltaTime, Space.World);
+        
+    //     if (movementDirection != Vector3.zero)
+    //     {
+    //         Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+    //         transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);            
+    //     }
+    // }
 
     private void SpeedControl()
     {

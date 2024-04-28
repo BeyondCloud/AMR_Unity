@@ -8,7 +8,6 @@ using UnityEngine;
 */
 public class FollowTargetCam : MonoBehaviour
 {
-    private float distance;
     /*
       To initialize the target,
       create an empty GameObject and attach the target
@@ -26,6 +25,9 @@ public class FollowTargetCam : MonoBehaviour
     public float scrollSensitivity = 2.0f;
     private const float MIN_ANGLE = -50.0f;
     private const float MAX_ANGLE = 50.0f;
+    
+    private float distance;
+
     void Start()
     {
         distance = Vector3.Distance(cameraTransform.position, target.position);
@@ -34,6 +36,7 @@ public class FollowTargetCam : MonoBehaviour
     private void Update()
     {
         transform.rotation = target.rotation;
+
         if (Input.GetMouseButton(1)) // Right mouse button
         {
             currentX += Input.GetAxis("Mouse X") * sensitivityX;
@@ -48,12 +51,25 @@ public class FollowTargetCam : MonoBehaviour
     }
     void LateUpdate()
     {  
+        /*
+         LateUpdate runs after all 'Update' functions.
+         Lastly, the LateUpdate function is commonly used to modify animated model bones
+        (ex. making the player model look up and down) or to implement a smooth camera follow.
+        */
         if (Input.GetMouseButton(1))
         {
             Vector3 dir = new Vector3(0, 0, -distance);
             Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
             cameraTransform.position = target.position + rotation * dir;
         }
+        if (Input.GetMouseButtonUp(1)) // Right mouse up
+        {
+            distance = Vector3.Distance(cameraTransform.position, target.position);
+            Vector3 dir = - target.forward * distance;
+            Quaternion rotation = Quaternion.Euler(transform.right * 30.0f);
+            cameraTransform.position = target.position + rotation * dir;
+        }
+
         cameraTransform.LookAt(target.position);
     }
 }

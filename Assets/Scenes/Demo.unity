@@ -2379,6 +2379,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: spin_right
       m_Image: {fileID: 0}
+    - m_Text: spin_left
+      m_Image: {fileID: 0}
     - m_Text: go_kitchen
       m_Image: {fileID: 0}
   m_OnValueChanged:
@@ -2941,7 +2943,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 38df50251b714ba4580b6887e3eeaf1a, type: 2}
+  - {fileID: 2100000, guid: 27fd405ace5e0b04d898410e41a3ba90, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3013,7 +3015,7 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 1024
-  orientation: {fileID: 1531676991}
+  thirdPersonCam: {fileID: 1528516378}
   grounded: 0
 --- !u!136 &1223174447
 CapsuleCollider:
@@ -3113,9 +3115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dec5b5c50950b74c8dfaadd20bb02c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1531676991}
+  target: {fileID: 1223174445}
   cameraTransform: {fileID: 1528516378}
-  allow_mouse_view_spin: 0
   offset: {x: 0, y: 0, z: 0}
   sensitivityX: 4
   sensitivityY: 1
@@ -5252,7 +5253,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1916576800}
   - component: {fileID: 1916576802}
-  - component: {fileID: 1916576803}
   m_Layer: 0
   m_Name: CleanerViewCam
   m_TagString: Untagged
@@ -5326,19 +5326,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &1916576803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916576799}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e36adb0e1a7d7674388382854f8a965f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraPostion: {fileID: 1223174445}
 --- !u!1001 &1939111623
 PrefabInstance:
   m_ObjectHideFlags: 0

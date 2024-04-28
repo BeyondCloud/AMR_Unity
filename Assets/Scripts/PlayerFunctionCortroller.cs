@@ -152,6 +152,11 @@ public class PlayerFunctionCortroller: MonoBehaviour
         Stop();
         spin_direction = 1;
     }
+    public void SpinLeft()
+    {
+        Stop();
+        spin_direction = -1;
+    }
 
     public void gotoKitchen()
     {
