@@ -140,7 +140,9 @@ public class PlayerFunctionCortroller: MonoBehaviour
     }
     public void Stop()
     {
+        agent.enabled = true;
         navigation.SetIdle();
+        agent.enabled = false;
         verticalInput = 0;
         horizontalInput = 0;
         spin_direction = 0;
@@ -159,12 +161,14 @@ public class PlayerFunctionCortroller: MonoBehaviour
     public void gotoKitchen()
     {
         Stop();
+        agent.enabled = true;
         navigation.GoToKitchen();
     }
 
     public void gotoCharge()
     {
         Stop();
+        agent.enabled = true;
         navigation.GoToCharge();
     }
 

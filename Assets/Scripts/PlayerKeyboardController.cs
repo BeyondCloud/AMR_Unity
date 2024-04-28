@@ -72,10 +72,6 @@ public class PlayerKeyboardController : MonoBehaviour
         // if(Input.GetKey(jumpKey) && readyToJump && grounded)
         if(Input.GetKey(jumpKey) && readyToJump)
         {
-            if (agent.enabled == true)
-            {
-                Debug.LogError("Cannot jump when Agent is applied!");
-            }
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);

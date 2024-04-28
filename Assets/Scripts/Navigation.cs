@@ -36,7 +36,8 @@ public class Navigation : MonoBehaviour
             switch (places)
             {
                 case PlacesEmum.idle:
-                    agent.ResetPath();
+                    if (agent.enabled)
+                        agent.ResetPath();
                     break;
                 case PlacesEmum.kitchen:
                     agent.destination = kitchen.position;

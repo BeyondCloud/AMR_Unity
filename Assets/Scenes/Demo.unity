@@ -3211,16 +3211,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1223174445}
+  - component: {fileID: 1223174449}
   - component: {fileID: 1223174444}
   - component: {fileID: 1223174443}
   - component: {fileID: 1223174446}
   - component: {fileID: 1223174450}
   - component: {fileID: 1223174448}
   - component: {fileID: 1223174451}
-  - component: {fileID: 1223174449}
+  - component: {fileID: 1223174452}
   - component: {fileID: 1223174441}
   - component: {fileID: 1223174447}
-  - component: {fileID: 1223174452}
   m_Layer: 0
   m_Name: Cleaner
   m_TagString: Player
@@ -3399,7 +3399,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223174440}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5000001
   m_Speed: 3.5
