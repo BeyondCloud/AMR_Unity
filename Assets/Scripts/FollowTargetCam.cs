@@ -73,6 +73,7 @@ public class FollowTargetCam : MonoBehaviour
         else if (Input.GetMouseButtonUp(1)) // Right mouse up
         {
             cameraTransform.position = cameraOrigin.position;
+            /* next update will use these as init values*/
             currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
             currentX = Vector3.Angle(target.forward, Vector3.forward);
         }
