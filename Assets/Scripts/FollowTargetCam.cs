@@ -59,21 +59,22 @@ public class FollowTargetCam : MonoBehaviour
         (ex. making the player model look up and down) or to implement a smooth camera follow.
         */
         if (Input.GetMouseButtonDown(1))
-        {
+        {   
+            cameraTransform.position = cameraOrigin.position;
             currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
             currentX = Vector3.Angle(target.forward, Vector3.forward);
         }
-        if (Input.GetMouseButton(1))
+        else if (Input.GetMouseButton(1))
         {
             Vector3 dir = new Vector3(0, 0, -distance);
-            // Vector3 dir = - target.forward * distance;
             Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
             cameraTransform.position = target.position + rotation * dir;
         }
-
-        if (Input.GetMouseButtonUp(1)) // Right mouse up
+        else if (Input.GetMouseButtonUp(1)) // Right mouse up
         {
             cameraTransform.position = cameraOrigin.position;
+            currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
+            currentX = Vector3.Angle(target.forward, Vector3.forward);
         }
 
         cameraTransform.LookAt(target.position);
