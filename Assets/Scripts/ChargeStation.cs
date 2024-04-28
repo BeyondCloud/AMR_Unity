@@ -4,6 +4,10 @@ public class ChargeStation : MonoBehaviour
 {
     public float chargeRate = 10f; // Amount of power charged per second
     public Material chargingMaterial;
+    void Start()
+    {
+        chargingMaterial.SetFloat("_Shininess", 1.0f);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player")) // Make sure the collider is tagged as "Player"
