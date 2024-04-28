@@ -32,6 +32,8 @@ public class FollowTargetCam : MonoBehaviour
     void Start()
     {
         distance = Vector3.Distance(cameraTransform.position, target.position);
+        currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
+        currentX = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
     }
     private void Update()
     {
@@ -49,6 +51,8 @@ public class FollowTargetCam : MonoBehaviour
          Lastly, the LateUpdate function is commonly used to modify animated model bones
         (ex. making the player model look up and down) or to implement a smooth camera follow.
         */
+        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+        Vector3 dir = new Vector3(0, 0, -distance);
         if (Input.GetMouseButtonDown(1))
         {   
             currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
@@ -62,16 +66,20 @@ public class FollowTargetCam : MonoBehaviour
             currentX += Input.GetAxis("Mouse X") * sensitivityX;
             currentY -= Input.GetAxis("Mouse Y") * sensitivityY;
             currentY = Mathf.Clamp(currentY, MIN_ANGLE, MAX_ANGLE);
-            Vector3 dir = new Vector3(0, 0, -distance);
-            Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+            rotation = Quaternion.Euler(currentY, currentX, 0);
             cameraTransform.position = target.position + rotation * dir;
-        }
-        else if (Input.GetMouseButtonUp(1)) // Right mouse up
+        }else if (Input.GetMouseButtonUp(1)) // Right mouse up
         {
             cameraTransform.position = cameraOrigin.position;
             distance = Vector3.Distance(cameraOrigin.position, target.position);
         }
-
+        else
+        {
+            currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
+            currentX = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up); //(0, 0, 1)
+            rotation = Quaternion.Euler(currentY, currentX, 0);
+            cameraTransform.position = target.position + rotation * dir;
+        }
         cameraTransform.LookAt(target.position);
     }
 }
