@@ -28,6 +28,9 @@ public class DropDown : MonoBehaviour
             case 5:
                 playerController.gotoKitchen();
                 break;
+            case 6:
+                playerController.gotoCharge();
+                break;
         }
     }
 }

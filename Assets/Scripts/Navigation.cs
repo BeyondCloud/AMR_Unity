@@ -13,7 +13,8 @@ public class Navigation : MonoBehaviour
         kitchen=1,
         livingRoom=2,
         bathroom=3,
-        bedroom=4
+        bedroom=4,
+        charge=5
     }
     public PlacesEmum places;
     private PlacesEmum oldPlaces;
@@ -23,6 +24,7 @@ public class Navigation : MonoBehaviour
     public Transform bathroom;
 
     public Transform bedroom;
+    public Transform charge;
     private NavMeshAgent agent;
     void Start()
     {
@@ -51,6 +53,9 @@ public class Navigation : MonoBehaviour
                 case PlacesEmum.bedroom:
                     agent.destination = bedroom.position;
                     break;
+                case PlacesEmum.charge:
+                    agent.destination = charge.position;
+                    break;
             }
             oldPlaces = places;
         }
@@ -74,5 +79,9 @@ public class Navigation : MonoBehaviour
     public void GoToBedroom()
     {
         places = PlacesEmum.bedroom;
+    }
+    public void GoToCharge()
+    {
+        places = PlacesEmum.charge;
     }
 }
