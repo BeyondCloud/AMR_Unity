@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -70,9 +71,11 @@ public class PlayerKeyboardController : MonoBehaviour
         // if(Input.GetKey(jumpKey) && readyToJump && grounded)
         if(Input.GetKey(jumpKey) && readyToJump)
         {
+            if (agent.enabled == true)
+            {
+                Debug.LogError("Cannot jump when Agent is applied!");
+            }
             readyToJump = false;
-            // if (agent.enabled == true)
-            //     Debug.LogError("Cannot jump when Agent is applied!");
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -149,7 +152,6 @@ public class PlayerKeyboardController : MonoBehaviour
     {
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
     private void ResetJump()

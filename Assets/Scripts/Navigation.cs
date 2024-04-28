@@ -16,6 +16,7 @@ public class Navigation : MonoBehaviour
         bedroom=4
     }
     public PlacesEmum places;
+    private PlacesEmum oldPlaces;
     // Start is called before the first frame update
     public Transform kitchen;
     public Transform livingRoom;
@@ -31,23 +32,29 @@ public class Navigation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (places)
+        if (oldPlaces != places)
         {
-            case PlacesEmum.idle:
-                agent.ResetPath();
-                break;
-            case PlacesEmum.kitchen:
-                agent.destination = kitchen.position;
-                break;
-            case PlacesEmum.livingRoom:
-                agent.destination = livingRoom.position;
-                break;
-            case PlacesEmum.bathroom:
-                agent.destination = bathroom.position;
-                break;
-            case PlacesEmum.bedroom:
-                agent.destination = bedroom.position;
-                break;
+
+
+            switch (places)
+            {
+                case PlacesEmum.idle:
+                    agent.ResetPath();
+                    break;
+                case PlacesEmum.kitchen:
+                    agent.destination = kitchen.position;
+                    break;
+                case PlacesEmum.livingRoom:
+                    agent.destination = livingRoom.position;
+                    break;
+                case PlacesEmum.bathroom:
+                    agent.destination = bathroom.position;
+                    break;
+                case PlacesEmum.bedroom:
+                    agent.destination = bedroom.position;
+                    break;
+            }
+            oldPlaces = places;
         }
     }
     public void SetIdle()
