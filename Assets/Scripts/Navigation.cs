@@ -34,8 +34,6 @@ public class Navigation : MonoBehaviour
     {
         if (oldPlaces != places)
         {
-
-
             switch (places)
             {
                 case PlacesEmum.idle:
