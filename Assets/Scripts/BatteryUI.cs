@@ -8,6 +8,7 @@ public class BatteryUI : MonoBehaviour
     public Cleaner cleaner;
     public Image PowerBar;
 
+
     void Update()
     {
         PowerBar.fillAmount = cleaner.power / 100;
