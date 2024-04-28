@@ -12,7 +12,10 @@ public class SimpleHttpServer : MonoBehaviour
     private bool isRunning = false;
 
     // public string url = "http://localhost:8000/";
-    private string url = "http://192.168.0.225:8000/";
+
+    // This will work on Windows, you need to turn off the firewall (local network only)
+    // curl -X POST http://<your_IPv4>:8000/goto -d "kitchen"
+    private string url = "http://192.168.0.225:8000/"; 
     // private string url = "http://0.0.0.0:8000/";
     
     // private string url = "http://36.228.19.33:8000/";
