@@ -69,6 +69,7 @@ public class FollowTargetCam : MonoBehaviour
         else if (Input.GetMouseButtonUp(1)) // Right mouse up
         {
             cameraTransform.position = cameraOrigin.position;
+            distance = Vector3.Distance(cameraOrigin.position, target.position);
         }
 
         cameraTransform.LookAt(target.position);
