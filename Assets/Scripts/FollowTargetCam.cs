@@ -36,20 +36,11 @@ public class FollowTargetCam : MonoBehaviour
     private void Update()
     {
         transform.rotation = target.rotation;
-
-        if (Input.GetMouseButton(1)) // Right mouse button
-        {
-            // Input.GetAxis use click point as the origin (0,0)
-            // Input.GetAxis range between -1...1 
-            currentX += Input.GetAxis("Mouse X") * sensitivityX;
-            currentY -= Input.GetAxis("Mouse Y") * sensitivityY;
-            currentY = Mathf.Clamp(currentY, MIN_ANGLE, MAX_ANGLE);
-            // Debug.Log("currentX: " + currentX + " currentY: " + currentY);
-        }
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
             distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity, 1f, 5f);
         }
+        Debug.DrawLine(target.position,target.position + target.forward, Color.red);
     }
     void LateUpdate()
     {  
@@ -60,12 +51,17 @@ public class FollowTargetCam : MonoBehaviour
         */
         if (Input.GetMouseButtonDown(1))
         {   
-            cameraTransform.position = cameraOrigin.position;
             currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
-            currentX = Vector3.Angle(target.forward, Vector3.forward);
+            currentX = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up); //(0, 0, 1)
+            // Debug.Log("currentX: " + currentX);
         }
         else if (Input.GetMouseButton(1))
         {
+            // Input.GetAxis use click point as the origin (0,0)
+            // Input.GetAxis range between -1...1 
+            currentX += Input.GetAxis("Mouse X") * sensitivityX;
+            currentY -= Input.GetAxis("Mouse Y") * sensitivityY;
+            currentY = Mathf.Clamp(currentY, MIN_ANGLE, MAX_ANGLE);
             Vector3 dir = new Vector3(0, 0, -distance);
             Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
             cameraTransform.position = target.position + rotation * dir;
@@ -73,9 +69,6 @@ public class FollowTargetCam : MonoBehaviour
         else if (Input.GetMouseButtonUp(1)) // Right mouse up
         {
             cameraTransform.position = cameraOrigin.position;
-            /* next update will use these as init values*/
-            currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
-            currentX = Vector3.Angle(target.forward, Vector3.forward);
         }
 
         cameraTransform.LookAt(target.position);

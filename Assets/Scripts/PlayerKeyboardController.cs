@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class PlayerKeyboardController : MonoBehaviour
 {
+    public PlayerFunctionCortroller playerController;
     [Header("Movement")]
     public float moveSpeed;
 
@@ -79,6 +80,21 @@ public class PlayerKeyboardController : MonoBehaviour
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+        // when q is pressed
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            playerController.SpinLeft();
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            playerController.SpinRight();
+        }
+        // if any key is up
+        if (Input.GetKeyUp(KeyCode.Q) || Input.GetKeyUp(KeyCode.E))
+        {
+            playerController.Stop();
+        }
+        
     }
     public bool grounded = false;
     // private void OnCollisionEnter(Collision collision)
