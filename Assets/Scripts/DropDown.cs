@@ -34,6 +34,9 @@ public class DropDown : MonoBehaviour
             case 7:
                 playerController.echoSeenObjects();
                 break;
+            case 8:
+                playerController.follow();
+                break;
         }
     }
 }

@@ -16,8 +16,7 @@ public class FieldOfView : MonoBehaviour
     public class Target
     {
         public string name;
-        public float distance=0.0f;
-        public Vector3 direction=Vector3.zero;
+        public Transform transform=new GameObject( ).transform;
         public bool canSee=false;
     }
     public Target[] targets;
@@ -52,14 +51,14 @@ public class FieldOfView : MonoBehaviour
         {
             if (rangeChecks.Length != 0)
             {
+                targets[i].transform = rangeChecks[i].transform;
                 Transform target = rangeChecks[i].transform;
-                targets[i].direction = (target.position - transform.position).normalized;
-
-                if (Vector3.Angle(transform.forward, targets[i].direction) < angle / 2)
+                Vector3 direction = (target.position - transform.position).normalized;
+                if (Vector3.Angle(transform.forward, direction) < angle / 2)
                 {
-                    targets[i].distance = Vector3.Distance(transform.position, target.position);
+                    float distance = Vector3.Distance(transform.position, target.position);
 
-                    if (!Physics.Raycast(transform.position, targets[i].direction, targets[i].distance, obstructionMask))
+                    if (!Physics.Raycast(transform.position, direction, distance, obstructionMask))
                         targets[i].canSee = true;
                     else
                         targets[i].canSee = false;

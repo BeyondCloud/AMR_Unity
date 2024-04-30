@@ -39,7 +39,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
     //     spin_right =7,
     //     spin_left =8,
     //     follow =9,    <<<<<<<<<<<<<<
-    //     echo_seen_object =10,   <<<<<<<<<<<<<<<<
+    //     echo_seen_object =10,
     //     find =11,
     //     get_battery_percentage =12,
     //     dance =13,
@@ -80,12 +80,14 @@ public class PlayerFunctionCortroller: MonoBehaviour
     private NavMeshAgent agent;
     private Navigation navigation;
     private FieldOfView fov;
+    private Follower follower;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         navigation = GetComponent<Navigation>();
         fov = GetComponent<FieldOfView>();
+        follower = GetComponent<Follower>();
     }
 
     private void Update()
@@ -172,6 +174,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
         verticalInput = 0;
         horizontalInput = 0;
         spin_direction = 0;
+        follower.Reset();
     }
     public void SpinRight()
     {
@@ -216,6 +219,31 @@ public class PlayerFunctionCortroller: MonoBehaviour
             log = "No objects in sight";
         else
             Debug.Log("I see " + log);
+    }
+    public void follow()
+    {
+        float min_distance = 1000;
+        int min_idx = -1;
+        for (int i = 0; i < fov.targets.Length; i++)
+        {
+            if (fov.targets[i].canSee && fov.targets[i].name == "person")
+            {
+                float distance = Vector3.Distance(
+                            transform.position, 
+                            fov.targets[i].transform.position
+                        );
+                if (distance < min_distance)
+                {
+                    min_distance = distance;
+                    min_idx = i;
+                }
+            }
+        }
+        if (min_idx != -1)
+        {
+            Debug.Log("Following " + fov.targets[min_idx].name);
+            follower.SetTarget( fov.targets[min_idx].transform);
+        }
     }
 
 }

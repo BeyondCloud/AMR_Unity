@@ -6,7 +6,10 @@ public class PlayerKeyboardController : MonoBehaviour
 {
     public PlayerFunctionCortroller playerController;
     [Header("Movement")]
-    public float moveSpeed;
+    public int speedLevel=2;
+    private int maxSpeedLevel = 5;
+    private int baseSpeed = 200;
+    private float moveSpeed;
 
     public float groundDrag;
 
@@ -34,20 +37,20 @@ public class PlayerKeyboardController : MonoBehaviour
     Rigidbody rb;
     private NavMeshAgent agent;
 
-    
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         rb.freezeRotation = true;
         readyToJump = true;
+        SetSpeed(speedLevel);
     }
 
     private void Update()
     {
         // ground check
         // grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
-
+        
         MyInput();
         SpeedControl();
 
@@ -169,5 +172,10 @@ public class PlayerKeyboardController : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+    private void SetSpeed(int speedLevel)
+    {
+        speedLevel = Mathf.Clamp(speedLevel, 1, maxSpeedLevel);
+        moveSpeed = baseSpeed * speedLevel;
     }
 }
