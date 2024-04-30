@@ -10,7 +10,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
     //     go_back =2,
     //     go_right =3,
     //     go_left =4,
-    //     go_crowded =5,   <<<<<<<<<<<<<<<
+    //     go_crowded =5,   <<<<<<<<<<<<<<< global crowded is okay, but FOV crowded is better
     //     go_charge =6,
     //     spin_right =7,
     //     spin_left =8,
