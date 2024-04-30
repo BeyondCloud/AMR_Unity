@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,6 +34,8 @@ public class Navigation : MonoBehaviour
     {
         if (oldPlaces != places)
         {
+            if (!agent.enabled)
+                agent.enabled = true;
             switch (places)
             {
                 case PlacesEmum.idle:
