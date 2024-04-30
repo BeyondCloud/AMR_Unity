@@ -1,6 +1,30 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+public class DefaultDict<TKey> : Dictionary<TKey, int>
+{
+    // Constructor
+    public DefaultDict() : base() {}
+
+    // Indexer
+    public new int this[TKey key]
+    {
+        get
+        {
+            if (!this.ContainsKey(key))
+            {
+                this[key] = 0; // Default value for int
+            }
+            return base[key];
+        }
+        set
+        {
+            base[key] = value;
+        }
+    }
+}
 public class PlayerFunctionCortroller: MonoBehaviour
 {
     // public enum Cmd
@@ -55,11 +79,13 @@ public class PlayerFunctionCortroller: MonoBehaviour
     Rigidbody rb;
     private NavMeshAgent agent;
     private Navigation navigation;
+    private FieldOfView fov;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         navigation = GetComponent<Navigation>();
+        fov = GetComponent<FieldOfView>();
     }
 
     private void Update()
@@ -171,6 +197,25 @@ public class PlayerFunctionCortroller: MonoBehaviour
         agent.enabled = true;
         navigation.GoToCharge();
     }
-
+    public void echoSeenObjects()
+    {
+        var dict = new DefaultDict<string>();
+        var log = "";
+        for (int i = 0; i < fov.targets.Length; i++)
+        {
+            if (fov.targets[i].canSee)
+            {
+                dict[fov.targets[i].name] += 1;
+            }
+        }
+        foreach (var item in dict)
+        {
+            log += item.Value + " "  + item.Key + "\n";
+        }
+        if (log == "")
+            log = "No objects in sight";
+        else
+            Debug.Log("I see " + log);
+    }
 
 }
