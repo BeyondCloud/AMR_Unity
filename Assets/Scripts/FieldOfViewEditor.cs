@@ -22,7 +22,7 @@ public class FieldOfViewEditor : Editor
         for (int i = 0; i < fov.targetRefs.Length; i++)
         {
             GameObject target = fov.targetRefs[i];
-            if (fov.canSeeTargets[i])
+            if (fov.targets[i].canSee)
                 Handles.DrawLine(fov.transform.position, target.transform.position);
         }
     }

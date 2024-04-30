@@ -13,14 +13,25 @@ public class FieldOfView : MonoBehaviour
 
     public LayerMask targetMask;
     public LayerMask obstructionMask;
-
-    public bool[] canSeeTargets;
+    public class Target
+    {
+        public string name;
+        public float distance=0.0f;
+        public Vector3 direction=Vector3.zero;
+        public bool canSee=false;
+    }
+    public Target[] targets;
 
     private void Start()
     {
         targetRefs = GameObject.FindGameObjectsWithTag("Findable");
         StartCoroutine(FOVRoutine());
-        canSeeTargets = new bool[targetRefs.Length];
+        targets = new Target[targetRefs.Length];
+        for (int i = 0; i < targets.Length; i++)
+        {
+            targets[i] = new Target();
+            targets[i].name = targetRefs[i].name;
+        }
     }
 
     private IEnumerator FOVRoutine()
@@ -42,22 +53,22 @@ public class FieldOfView : MonoBehaviour
             if (rangeChecks.Length != 0)
             {
                 Transform target = rangeChecks[i].transform;
-                Vector3 directionToTarget = (target.position - transform.position).normalized;
+                targets[i].direction = (target.position - transform.position).normalized;
 
-                if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+                if (Vector3.Angle(transform.forward, targets[i].direction) < angle / 2)
                 {
-                    float distanceToTarget = Vector3.Distance(transform.position, target.position);
+                    targets[i].distance = Vector3.Distance(transform.position, target.position);
 
-                    if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
-                        canSeeTargets[i] = true;
+                    if (!Physics.Raycast(transform.position, targets[i].direction, targets[i].distance, obstructionMask))
+                        targets[i].canSee = true;
                     else
-                        canSeeTargets[i] = false;
+                        targets[i].canSee = false;
                 }
                 else
-                    canSeeTargets[i] = false;
+                    targets[i].canSee = false;
             }
-            else if (canSeeTargets[i])
-                canSeeTargets[i] = false;
+            else if (targets[i].canSee)
+                targets[i].canSee = false;
         }
 
     }
