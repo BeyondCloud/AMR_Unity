@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
+using System.Collections;
 
 public class DefaultDict<TKey> : Dictionary<TKey, int>
 {
@@ -81,6 +84,8 @@ public class PlayerFunctionCortroller: MonoBehaviour
     private Navigation navigation;
     private FieldOfView fov;
     private Follower follower;
+    private bool is_coroutine_running = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -103,9 +108,11 @@ public class PlayerFunctionCortroller: MonoBehaviour
 
     void FixedUpdate()
     {
+        if (is_coroutine_running)
+            return;
+           
         MovePlayer();
         SpinPlayer();
-
     }
 
     public bool grounded = false;
@@ -200,10 +207,9 @@ public class PlayerFunctionCortroller: MonoBehaviour
         agent.enabled = true;
         navigation.GoToCharge();
     }
-    public void echoSeenObjects()
+    private DefaultDict<string> scanObjects()
     {
         var dict = new DefaultDict<string>();
-        var log = "";
         for (int i = 0; i < fov.targets.Length; i++)
         {
             if (fov.targets[i].canSee)
@@ -211,6 +217,12 @@ public class PlayerFunctionCortroller: MonoBehaviour
                 dict[fov.targets[i].name] += 1;
             }
         }
+        return dict;
+    }
+    public void echoSeenObjects()
+    {
+        DefaultDict<string> dict = scanObjects();
+        string log = "";
         foreach (var item in dict)
         {
             log += item.Value + " "  + item.Key + "\n";
@@ -244,6 +256,27 @@ public class PlayerFunctionCortroller: MonoBehaviour
             Debug.Log("Following " + fov.targets[min_idx].name);
             follower.SetTarget( fov.targets[min_idx].transform);
         }
+    }
+    public void rotate(int degree)
+    {
+        Vector3 rot = new Vector3(0, degree, 0);
+        Vector3 rotation = Quaternion.AngleAxis(degree, Vector3.up) * transform.forward;
+        StartCoroutine(OnRotate(rotation));
+    }
+    IEnumerator OnRotate(Vector3 rotate_to)
+    {
+        is_coroutine_running = true;
+        while (Vector3.Angle(transform.forward, rotate_to) > 1)
+        {
+            var rotation = Vector3.RotateTowards(transform.forward, rotate_to,  Time.deltaTime, 0.0f);
+            transform.rotation = Quaternion.LookRotation(rotation);
+            yield return null;
+        }
+        is_coroutine_running = false;
+    }
+    public void go_crowded()
+    {
+
     }
 
 }

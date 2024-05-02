@@ -51,7 +51,7 @@ public class FollowTargetCam : MonoBehaviour
          Lastly, the LateUpdate function is commonly used to modify animated model bones
         (ex. making the player model look up and down) or to implement a smooth camera follow.
         */
-        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+        Quaternion rotation;
         Vector3 dir = new Vector3(0, 0, -distance);
         if (Input.GetMouseButtonDown(1))
         {   
