@@ -4,9 +4,15 @@ public class Follower : MonoBehaviour
 {
     private Transform target=null;
     public float nearDistance = 1.5f;
-    public float move_speed = 2.0f;
+    public float speedLevel;
     public float rotate_speed = 1.0f;
     private float distance;
+    private PlayerKeyboardController playerController;
+    void Start()
+    {
+        playerController = GetComponent<PlayerKeyboardController>();
+        speedLevel = playerController.speedLevel;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -25,7 +31,7 @@ public class Follower : MonoBehaviour
 
             newDirection.y = 0.0f;
             transform.rotation = Quaternion.LookRotation(newDirection);
-            transform.position = Vector3.MoveTowards(transform.position, target.position, move_speed * Time.deltaTime); 
+            transform.position = Vector3.MoveTowards(transform.position, target.position, speedLevel * Time.deltaTime); 
         }
     }
     public void SetTarget(Transform newTarget)

@@ -38,8 +38,8 @@ public class PlayerFunctionCortroller: MonoBehaviour
     //     go_charge =6,
     //     spin_right =7,
     //     spin_left =8,
-    //     follow =9,    <<<<<<<<<<<<<<
-    //     echo_seen_object =10,
+    //     follow =9,    DONE
+    //     echo_seen_object =10,   DONE
     //     find =11,
     //     get_battery_percentage =12,
     //     dance =13,
@@ -216,7 +216,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
             log += item.Value + " "  + item.Key + "\n";
         }
         if (log == "")
-            log = "No objects in sight";
+            Debug.Log("No objects in sight");
         else
             Debug.Log("I see " + log);
     }
