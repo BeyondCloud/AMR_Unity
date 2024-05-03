@@ -74,7 +74,8 @@ public class PlayerFunctionCortroller : MonoBehaviour
     private FieldOfView fov;
     private Follower follower;
     private int coroutine_count = 0;
-
+    private float speedLevel;
+    private PlayerKeyboardController playerController;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -82,6 +83,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         navigation = GetComponent<Navigation>();
         fov = GetComponent<FieldOfView>();
         follower = GetComponent<Follower>();
+        playerController = GetComponent<PlayerKeyboardController>();
         // StartCoroutine(OnRotate(90));
     }
 
@@ -106,12 +108,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
 
     public bool grounded = false;
-    public bool toggle_collide = false; // Use to break coroutine
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collision");
-        toggle_collide = !toggle_collide;
-    }
     private void OnCollisionStay(Collision collision)
     {
         if (grounded == false)
@@ -255,86 +251,9 @@ public class PlayerFunctionCortroller : MonoBehaviour
         if (min_idx != -1)
         {
             Debug.Log("Following " + fov.targets[min_idx].name);
-            follower.SetTarget(fov.targets[min_idx].transform);
+            follower.SetTarget(fov.targets[min_idx].transform.position);
         }
     }
-    // public void rotate(int angle)
-    // {
-    //     StartCoroutine(OnRotate(angle));
-    // }
-    // IEnumerator OnRotate(float angle)
-    // {
-    //     coroutine_count += 1;
-    //     Vector3 rot = new Vector3(0, angle, 0);
-    //     Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
-    //     while (Vector3.Angle(transform.forward, rotate_to) > 1)
-    //     {
-    //         var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
-    //         transform.rotation = Quaternion.LookRotation(rotation);
-    //         yield return null;
-    //     }
-    //     coroutine_count -= 1;
-    // }
-    // IEnumerator OnGoto(Vector3 target)
-    // {
-    //     coroutine_count += 1;
-    //     var step = moveSpeed * Time.deltaTime; // calculate distance to move
-    //     bool init_toggle_collide = toggle_collide;
-    //     // if collide, break coroutine
-    //     while (Vector3.Distance(transform.position, target) > 0.1 || toggle_collide == init_toggle_collide)
-    //     {
-    //         transform.position = Vector3.MoveTowards(transform.position, target, step);
-    //         yield return null;
-    //     }
-    //     coroutine_count -= 1;
-    // }
-    // private List<ScanMeta> get_surrounding_objects(int split = 4)
-    // {
-    //     /*
-    //     Spin clockwise
-    //     Turn 360 / split times and get list of object list
-    //     Return angle and object list
-    //     for example:
-
-    //             cup
-    //              0
-
-    //     270     BOT       90
-
-    //             180
-
-    //     return [
-    //         (0, {"cup":1}),
-    //         (90, []),
-    //         (180, []),
-    //         (270, []),
-    //     ]
-    //     */
-    //     if (split < 1)
-    //     {
-    //         throw new System.ArgumentException("split should be at least one");
-    //     }
-    //     else if (split > 8)
-    //     {
-    //         throw new System.ArgumentException("split should be at most 8");
-    //     }
-    //     float angle = 360 / split;
-    //     float current_angle = 0;
-    //     List<ScanMeta> res = new List<ScanMeta>();
-    //     for (int i = 0; i < split; i++)
-    //     {
-    //         Debug.Log("Rotating " + angle);
-    //         Dictionary<string, List<Transform>> cv_objects = scanObjects();
-    //         res.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
-    //         current_angle += angle;
-
-    //         // Rotate
-    //         Vector3 rot = new Vector3(0, angle, 0);
-    //         Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
-    //         OnRotate(angle);
-    //     }
-    //     return res;
-    // }
     IEnumerator go_crowded_thread()
     {
         coroutine_count += 1;
@@ -351,16 +270,14 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         float angle = 360 / split;
         float current_angle = 0;
-        List<ScanMeta> res = new List<ScanMeta>();
         for (int i = 0; i < split; i++)
         {
-            Debug.Log("Rotating " + angle);
             Dictionary<string, List<Transform>> cv_objects = scanObjects();
-            res.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
+            Debug.Log("Found " + cv_objects.Count + " objects");
+            scanMetas.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
             current_angle += angle;
 
             // OnRotate
-            Vector3 rot = new Vector3(0, angle, 0);
             Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
             while (Vector3.Angle(transform.forward, rotate_to) > 1)
             {
@@ -394,15 +311,12 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         centroid /= max_person;
         //OnGoto
-
-        var step = moveSpeed * Time.deltaTime; // calculate distance to move
-        bool init_toggle_collide = toggle_collide;
-        // if collide, break coroutine
-        while (Vector3.Distance(transform.position, centroid) > 0.1 || toggle_collide == init_toggle_collide)
+        follower.SetTarget(centroid);
+        while (follower.isFollowing)
         {
-            transform.position = Vector3.MoveTowards(transform.position, centroid, step);
             yield return null;
         }
+        follower.Reset();
         coroutine_count -= 1;
     }
     public void go_crowded()

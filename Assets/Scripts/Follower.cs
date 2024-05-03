@@ -2,44 +2,44 @@ using UnityEngine;
 
 public class Follower : MonoBehaviour
 {
-    private Transform target=null;
+    private Vector3 target;
+    public bool isFollowing = false;
     public float nearDistance = 1.5f;
-    public float speedLevel;
     public float rotate_speed = 1.0f;
     private float distance;
     private PlayerKeyboardController playerController;
     void Start()
     {
         playerController = GetComponent<PlayerKeyboardController>();
-        speedLevel = playerController.speedLevel;
     }
     // Update is called once per frame
     void Update()
     {
-        if (target == null)
+        if (!isFollowing)
         {
             return;
         }
-        distance = Vector3.Distance(target.position, transform.position);
+        distance = Vector3.Distance(target, transform.position);
         if (distance > nearDistance)
         {
-            Vector3 targetDirection = target.position - transform.position;
-            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, rotate_speed  * Time.deltaTime, 0.0f);
+            Vector3 targetDirection = target - transform.position;
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, rotate_speed * Time.deltaTime, 0.0f);
 
             // Draw a ray pointing at our target in
             Debug.DrawRay(transform.position, newDirection, Color.red);
 
             newDirection.y = 0.0f;
             transform.rotation = Quaternion.LookRotation(newDirection);
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speedLevel * Time.deltaTime); 
+            transform.position = Vector3.MoveTowards(transform.position, target, playerController.speedLevel * Time.deltaTime);
         }
     }
-    public void SetTarget(Transform newTarget)
+    public void SetTarget(Vector3 newTarget)
     {
         target = newTarget;
+        isFollowing = true;
     }
     public void Reset()
     {
-        target = null;
+        isFollowing = false;
     }
 }
