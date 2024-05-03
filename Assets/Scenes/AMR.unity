@@ -2578,6 +2578,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: follow
       m_Image: {fileID: 0}
+    - m_Text: go_crowded
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -3057,7 +3059,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.17
   m_Height: 1.7757791
   m_Direction: 1
   m_Center: {x: 0, y: 0.9193029, z: 0}
@@ -3398,7 +3400,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.17
   m_Height: 1.7757791
   m_Direction: 1
   m_Center: {x: 0, y: 0.9193029, z: 0}
@@ -3747,8 +3749,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84d9de79f9d47e546b42df2edf32f51b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFollowing: 0
   nearDistance: 1.5
-  move_speed: 2
   rotate_speed: 1
 --- !u!1 &1227221018
 GameObject:
