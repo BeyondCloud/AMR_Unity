@@ -82,7 +82,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         navigation = GetComponent<Navigation>();
         fov = GetComponent<FieldOfView>();
         follower = GetComponent<Follower>();
-        StartCoroutine(OnRotate(90));
+        // StartCoroutine(OnRotate(90));
     }
 
     private void Update()
@@ -262,54 +262,85 @@ public class PlayerFunctionCortroller : MonoBehaviour
     // {
     //     StartCoroutine(OnRotate(angle));
     // }
-    IEnumerator OnRotate(int angle)
+    // IEnumerator OnRotate(float angle)
+    // {
+    //     coroutine_count += 1;
+    //     Vector3 rot = new Vector3(0, angle, 0);
+    //     Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
+    //     while (Vector3.Angle(transform.forward, rotate_to) > 1)
+    //     {
+    //         var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
+    //         transform.rotation = Quaternion.LookRotation(rotation);
+    //         yield return null;
+    //     }
+    //     coroutine_count -= 1;
+    // }
+    // IEnumerator OnGoto(Vector3 target)
+    // {
+    //     coroutine_count += 1;
+    //     var step = moveSpeed * Time.deltaTime; // calculate distance to move
+    //     bool init_toggle_collide = toggle_collide;
+    //     // if collide, break coroutine
+    //     while (Vector3.Distance(transform.position, target) > 0.1 || toggle_collide == init_toggle_collide)
+    //     {
+    //         transform.position = Vector3.MoveTowards(transform.position, target, step);
+    //         yield return null;
+    //     }
+    //     coroutine_count -= 1;
+    // }
+    // private List<ScanMeta> get_surrounding_objects(int split = 4)
+    // {
+    //     /*
+    //     Spin clockwise
+    //     Turn 360 / split times and get list of object list
+    //     Return angle and object list
+    //     for example:
+
+    //             cup
+    //              0
+
+    //     270     BOT       90
+
+    //             180
+
+    //     return [
+    //         (0, {"cup":1}),
+    //         (90, []),
+    //         (180, []),
+    //         (270, []),
+    //     ]
+    //     */
+    //     if (split < 1)
+    //     {
+    //         throw new System.ArgumentException("split should be at least one");
+    //     }
+    //     else if (split > 8)
+    //     {
+    //         throw new System.ArgumentException("split should be at most 8");
+    //     }
+    //     float angle = 360 / split;
+    //     float current_angle = 0;
+    //     List<ScanMeta> res = new List<ScanMeta>();
+    //     for (int i = 0; i < split; i++)
+    //     {
+    //         Debug.Log("Rotating " + angle);
+    //         Dictionary<string, List<Transform>> cv_objects = scanObjects();
+    //         res.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
+    //         current_angle += angle;
+
+    //         // Rotate
+    //         Vector3 rot = new Vector3(0, angle, 0);
+    //         Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
+    //         OnRotate(angle);
+    //     }
+    //     return res;
+    // }
+    IEnumerator go_crowded_thread()
     {
         coroutine_count += 1;
-        Vector3 rot = new Vector3(0, angle, 0);
-        Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
-        while (Vector3.Angle(transform.forward, rotate_to) > 1)
-        {
-            var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
-            transform.rotation = Quaternion.LookRotation(rotation);
-            yield return null;
-        }
-        coroutine_count -= 1;
-    }
-    IEnumerator OnGoto(Vector3 target)
-    {
-        coroutine_count += 1;
-        var step = moveSpeed * Time.deltaTime; // calculate distance to move
-        bool init_toggle_collide = toggle_collide;
-        // if collide, break coroutine
-        while (Vector3.Distance(transform.position, target) > 0.1 || toggle_collide == init_toggle_collide)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target, step);
-            yield return null;
-        }
-        coroutine_count -= 1;
-    }
-    private List<ScanMeta> get_surrounding_objects(int split = 4)
-    {
-        /*
-        Spin clockwise
-        Turn 360 / split times and get list of object list
-        Return angle and object list
-        for example:
-
-                cup
-                 0
-
-        270     BOT       90
-
-                180
-
-        return [
-            (0, {"cup":1}),
-            (90, []),
-            (180, []),
-            (270, []),
-        ]
-        */
+        List<ScanMeta> scanMetas = new List<ScanMeta>();
+        int split = 4;
+        // get surrounding objects
         if (split < 1)
         {
             throw new System.ArgumentException("split should be at least one");
@@ -328,50 +359,55 @@ public class PlayerFunctionCortroller : MonoBehaviour
             res.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
             current_angle += angle;
 
-            // Rotate
+            // OnRotate
             Vector3 rot = new Vector3(0, angle, 0);
             Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
-            // while (Vector3.Angle(transform.forward, rotate_to) > 1)
-            // {
-            //     var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
-            //     transform.rotation = Quaternion.LookRotation(rotation);
-            //     yield return null;
-            // }
+            while (Vector3.Angle(transform.forward, rotate_to) > 1)
+            {
+                var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
+                transform.rotation = Quaternion.LookRotation(rotation);
+                yield return null;
+            }
         }
-        return res;
+
+        // find most crowded area
+        int max_person = -1;
+        int index_max_person = -1;
+        for (int i = 0; i < scanMetas.Count; i++)
+        {
+            ScanMeta scan_res = scanMetas[i];
+            if (scan_res.objects.ContainsKey("person") && scan_res.objects["person"].Count > max_person)
+            {
+                max_person = scan_res.objects["person"].Count;
+                index_max_person = i;
+            }
+        }
+        if (max_person == -1)
+        {
+            Debug.Log("No person in sight");
+            yield break;
+        }
+        Vector3 centroid = new Vector3(0, 0, 0);
+        foreach (Transform obj in scanMetas[index_max_person].objects["person"])
+        {
+            centroid += obj.position;
+        }
+        centroid /= max_person;
+        //OnGoto
+
+        var step = moveSpeed * Time.deltaTime; // calculate distance to move
+        bool init_toggle_collide = toggle_collide;
+        // if collide, break coroutine
+        while (Vector3.Distance(transform.position, centroid) > 0.1 || toggle_collide == init_toggle_collide)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, centroid, step);
+            yield return null;
+        }
+        coroutine_count -= 1;
     }
-    // IEnumerator go_crowded_thread()
-    // {
-    //     coroutine_count += 1;
-    //     go_crowded();
-    //     coroutine_count -= 1;
-    // }
     public void go_crowded()
     {
-        // List<ScanMeta> scanMetas = get_surrounding_objects(4);
-        // int max_person = -1;
-        // int index_max_person = -1;
-        // for (int i = 0; i < scanMetas.Count; i++)
-        // {
-        //     ScanMeta scan_res = scanMetas[i];
-        //     if (scan_res.objects.ContainsKey("person") && scan_res.objects["person"].Count > max_person)
-        //     {
-        //         max_person = scan_res.objects["person"].Count;
-        //         index_max_person = i;
-        //     }
-        // }
-        // if (max_person == -1)
-        // {
-        //     Debug.Log("No person in sight");
-        //     return;
-        // }
-        // Vector3 centroid = new Vector3(0, 0, 0);
-        // foreach (Transform obj in scanMetas[index_max_person].objects["person"])
-        // {
-        //     centroid += obj.position;
-        // }
-        // centroid /= max_person;
-        // OnGoto(centroid);
+        StartCoroutine(go_crowded_thread());
     }
 
 }
