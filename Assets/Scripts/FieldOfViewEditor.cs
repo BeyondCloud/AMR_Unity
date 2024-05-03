@@ -19,11 +19,9 @@ public class FieldOfViewEditor : Editor
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngle02 * fov.radius);
 
         Handles.color = Color.green;
-        for (int i = 0; i < fov.targetRefs.Length; i++)
+        for (int i = 0;i < fov.targetsInView.Count;i++)
         {
-            GameObject target = fov.targetRefs[i];
-            if (fov.targets[i].canSee)
-                Handles.DrawLine(fov.transform.position, target.transform.position);
+            Handles.DrawLine(fov.transform.position, fov.targetsInView[i].position);
         }
     }
 

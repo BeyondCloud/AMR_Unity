@@ -16,25 +16,26 @@ public class FieldOfView : MonoBehaviour
     public class Target
     {
         public string name;
-        public Transform transform;
-        public bool canSee=false;
-        public Target(string name, Transform transform)
+        public Vector3 position;
+        public Target(string name, Vector3 position)
         {
             this.name = name;
-            this.transform = transform;
+            this.position = position;
         }
     }
-    public Target[] targets;
+    // public Target[] targets;
+    public List<Target> targetsInView=new List<Target>();
 
     private void Start()
     {
         targetRefs = GameObject.FindGameObjectsWithTag("Findable");
         StartCoroutine(FOVRoutine());
-        targets = new Target[targetRefs.Length];
-        for (int i = 0; i < targets.Length; i++)
-        {
-            targets[i] = new Target(targetRefs[i].name, targetRefs[i].transform);
-        }
+        // targets = new Target[targetRefs.Length];
+        // for (int i = 0; i < targets.Length; i++)
+        // {
+        //     targets[i] = new Target(targetRefs[i].name, targetRefs[i].transform.Find("metarig"));
+        //     Debug.Log(targetRefs[i].transform.Find("metarig").position);
+        // }
     }
 
     private IEnumerator FOVRoutine()
@@ -51,27 +52,23 @@ public class FieldOfView : MonoBehaviour
     private void FieldOfViewCheck()
     {
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, radius, targetMask);
+        targetsInView = new List<Target>();
         for (int i = 0; i < rangeChecks.Length;i++)
         {
             if (rangeChecks.Length != 0)
             {
-                targets[i].transform = rangeChecks[i].transform;
                 Transform target = rangeChecks[i].transform;
                 Vector3 direction = (target.position - transform.position).normalized;
                 if (Vector3.Angle(transform.forward, direction) < angle / 2)
                 {
                     float distance = Vector3.Distance(transform.position, target.position);
-
                     if (!Physics.Raycast(transform.position, direction, distance, obstructionMask))
-                        targets[i].canSee = true;
-                    else
-                        targets[i].canSee = false;
+                    {
+                        Target t = new Target(rangeChecks[i].gameObject.name, target.position);
+                        targetsInView.Add(t);
+                    }
                 }
-                else
-                    targets[i].canSee = false;
             }
-            else if (targets[i].canSee)
-                targets[i].canSee = false;
         }
 
     }

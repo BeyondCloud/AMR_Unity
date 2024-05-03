@@ -10,8 +10,8 @@ using System.Collections;
 public class ScanMeta
 {
     public float angle;
-    public Dictionary<string, List<Transform>> objects;
-    public ScanMeta(float angle, Dictionary<string, List<Transform>> objects)
+    public Dictionary<string, List<Vector3>> objects;
+    public ScanMeta(float angle, Dictionary<string, List<Vector3>> objects)
     {
         this.angle = angle;
         this.objects = objects;
@@ -26,7 +26,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     //     go_back =2,
     //     go_right =3,
     //     go_left =4,
-    //     go_crowded =5,   <<<<<<<<<<<<<<< global crowded is okay, but FOV crowded is better
+    //     go_crowded =5,   Done
     //     go_charge =6,
     //     spin_right =7,
     //     spin_left =8,
@@ -199,26 +199,24 @@ public class PlayerFunctionCortroller : MonoBehaviour
         agent.enabled = true;
         navigation.GoToCharge();
     }
-    private Dictionary<string, List<Transform>> scanObjects()
+    private Dictionary<string, List<Vector3>> scanObjects()
     {
-        var dict = new Dictionary<string, List<Transform>>();
-        for (int i = 0; i < fov.targets.Length; i++)
+        var dict = new Dictionary<string, List<Vector3>>();
+        for (int i = 0; i < fov.targetsInView.Count; i++)
         {
-            var target = fov.targets[i];
-            if (target.canSee)
+
+            if (!dict.ContainsKey(fov.targetsInView[i].name))
             {
-                if (!dict.ContainsKey(target.name))
-                {
-                    dict[target.name] = new List<Transform>();
-                }
-                dict[target.name].Add(target.transform);
+                dict[fov.targetsInView[i].name] = new List<Vector3>();
             }
+            dict[fov.targetsInView[i].name].Add(fov.targetsInView[i].position);
+
         }
         return dict;
     }
     public void echoSeenObjects()
     {
-        Dictionary<string, List<Transform>> dict = scanObjects();
+        Dictionary<string, List<Vector3>> dict = scanObjects();
         string log = "";
         foreach (var item in dict)
         {
@@ -233,13 +231,13 @@ public class PlayerFunctionCortroller : MonoBehaviour
     {
         float min_distance = 1000;
         int min_idx = -1;
-        for (int i = 0; i < fov.targets.Length; i++)
+        for (int i = 0; i < fov.targetsInView.Count; i++)
         {
-            if (fov.targets[i].canSee && fov.targets[i].name == "person")
+            if (fov.targetsInView[i].name == "person")
             {
                 float distance = Vector3.Distance(
                             transform.position,
-                            fov.targets[i].transform.position
+                            fov.targetsInView[i].position
                         );
                 if (distance < min_distance)
                 {
@@ -250,11 +248,11 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         if (min_idx != -1)
         {
-            Debug.Log("Following " + fov.targets[min_idx].name);
-            follower.SetTarget(fov.targets[min_idx].transform.position);
+            Debug.Log("Following " + fov.targetsInView[min_idx].name);
+            follower.SetTarget(fov.targetsInView[min_idx].position);
         }
     }
-    IEnumerator go_crowded_thread()
+    IEnumerator go_crowded_routine()
     {
         coroutine_count += 1;
         List<ScanMeta> scanMetas = new List<ScanMeta>();
@@ -272,7 +270,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         float current_angle = 0;
         for (int i = 0; i < split; i++)
         {
-            Dictionary<string, List<Transform>> cv_objects = scanObjects();
+            Dictionary<string, List<Vector3>> cv_objects = scanObjects();
             Debug.Log("Found " + cv_objects.Count + " objects");
             scanMetas.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
             current_angle += angle;
@@ -305,9 +303,9 @@ public class PlayerFunctionCortroller : MonoBehaviour
             yield break;
         }
         Vector3 centroid = new Vector3(0, 0, 0);
-        foreach (Transform obj in scanMetas[index_max_person].objects["person"])
+        foreach (Vector3 obj in scanMetas[index_max_person].objects["person"])
         {
-            centroid += obj.position;
+            centroid += obj;
         }
         centroid /= max_person;
         //OnGoto
@@ -321,7 +319,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void go_crowded()
     {
-        StartCoroutine(go_crowded_thread());
+        StartCoroutine(go_crowded_routine());
     }
 
 }
