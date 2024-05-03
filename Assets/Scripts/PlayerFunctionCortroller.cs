@@ -6,29 +6,18 @@ using UnityEngine.AI;
 using UnityEngine.UIElements;
 using System.Collections;
 
-public class DefaultDict<TKey> : Dictionary<TKey, int>
-{
-    // Constructor
-    public DefaultDict() : base() {}
 
-    // Indexer
-    public new int this[TKey key]
+public class ScanMeta
+{
+    public float angle;
+    public Dictionary<string, List<Transform>> objects;
+    public ScanMeta(float angle, Dictionary<string, List<Transform>> objects)
     {
-        get
-        {
-            if (!this.ContainsKey(key))
-            {
-                this[key] = 0; // Default value for int
-            }
-            return base[key];
-        }
-        set
-        {
-            base[key] = value;
-        }
+        this.angle = angle;
+        this.objects = objects;
     }
 }
-public class PlayerFunctionCortroller: MonoBehaviour
+public class PlayerFunctionCortroller : MonoBehaviour
 {
     // public enum Cmd
     // {
@@ -54,8 +43,8 @@ public class PlayerFunctionCortroller: MonoBehaviour
     // }
 
     [Header("Movement")]
-    public float spin_direction=0;
-    private float spin_speed=100;
+    public float spin_direction = 0;
+    private float spin_speed = 100;
     public float moveSpeed;
 
     public float groundDrag;
@@ -84,7 +73,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
     private Navigation navigation;
     private FieldOfView fov;
     private Follower follower;
-    private bool is_coroutine_running = false;
+    private int coroutine_count = 0;
 
     private void Start()
     {
@@ -93,6 +82,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
         navigation = GetComponent<Navigation>();
         fov = GetComponent<FieldOfView>();
         follower = GetComponent<Follower>();
+        StartCoroutine(OnRotate(90));
     }
 
     private void Update()
@@ -108,14 +98,20 @@ public class PlayerFunctionCortroller: MonoBehaviour
 
     void FixedUpdate()
     {
-        if (is_coroutine_running)
+        if (coroutine_count > 0)
             return;
-           
+
         MovePlayer();
         SpinPlayer();
     }
 
     public bool grounded = false;
+    public bool toggle_collide = false; // Use to break coroutine
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision");
+        toggle_collide = !toggle_collide;
+    }
     private void OnCollisionStay(Collision collision)
     {
         if (grounded == false)
@@ -123,10 +119,10 @@ public class PlayerFunctionCortroller: MonoBehaviour
             grounded = true;
         }
     }
- 
+
     private void OnCollisionExit(Collision collision)
     {
-        if(grounded == true) // this triggers only if the ball is not touching the ground anymore
+        if (grounded == true) // this triggers only if the ball is not touching the ground anymore
         {
             grounded = false;
         }
@@ -137,7 +133,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         // on ground
-        if(grounded)
+        if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
         // in air
@@ -147,9 +143,9 @@ public class PlayerFunctionCortroller: MonoBehaviour
     private void SpinPlayer()
     {
         // calculate movement direction
-        if(spin_direction != 0)
+        if (spin_direction != 0)
         {
-            transform.Rotate(0, spin_direction * spin_speed*Time.deltaTime, 0,Space.Self);
+            transform.Rotate(0, spin_direction * spin_speed * Time.deltaTime, 0, Space.Self);
         }
     }
     private void SpeedControl()
@@ -157,7 +153,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         // limit velocity if needed
-        if(flatVel.magnitude > moveSpeed)
+        if (flatVel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
@@ -207,30 +203,35 @@ public class PlayerFunctionCortroller: MonoBehaviour
         agent.enabled = true;
         navigation.GoToCharge();
     }
-    private DefaultDict<string> scanObjects()
+    private Dictionary<string, List<Transform>> scanObjects()
     {
-        var dict = new DefaultDict<string>();
+        var dict = new Dictionary<string, List<Transform>>();
         for (int i = 0; i < fov.targets.Length; i++)
         {
-            if (fov.targets[i].canSee)
+            var target = fov.targets[i];
+            if (target.canSee)
             {
-                dict[fov.targets[i].name] += 1;
+                if (!dict.ContainsKey(target.name))
+                {
+                    dict[target.name] = new List<Transform>();
+                }
+                dict[target.name].Add(target.transform);
             }
         }
         return dict;
     }
     public void echoSeenObjects()
     {
-        DefaultDict<string> dict = scanObjects();
+        Dictionary<string, List<Transform>> dict = scanObjects();
         string log = "";
         foreach (var item in dict)
         {
-            log += item.Value + " "  + item.Key + "\n";
+            log += item.Value.Count + " " + item.Key + "\n";
         }
         if (log == "")
             Debug.Log("No objects in sight");
         else
-            Debug.Log("I see " + log);
+            Debug.Log("I see a" + log);
     }
     public void follow()
     {
@@ -241,7 +242,7 @@ public class PlayerFunctionCortroller: MonoBehaviour
             if (fov.targets[i].canSee && fov.targets[i].name == "person")
             {
                 float distance = Vector3.Distance(
-                            transform.position, 
+                            transform.position,
                             fov.targets[i].transform.position
                         );
                 if (distance < min_distance)
@@ -254,29 +255,123 @@ public class PlayerFunctionCortroller: MonoBehaviour
         if (min_idx != -1)
         {
             Debug.Log("Following " + fov.targets[min_idx].name);
-            follower.SetTarget( fov.targets[min_idx].transform);
+            follower.SetTarget(fov.targets[min_idx].transform);
         }
     }
-    public void rotate(int degree)
+    // public void rotate(int angle)
+    // {
+    //     StartCoroutine(OnRotate(angle));
+    // }
+    IEnumerator OnRotate(int angle)
     {
-        Vector3 rot = new Vector3(0, degree, 0);
-        Vector3 rotation = Quaternion.AngleAxis(degree, Vector3.up) * transform.forward;
-        StartCoroutine(OnRotate(rotation));
-    }
-    IEnumerator OnRotate(Vector3 rotate_to)
-    {
-        is_coroutine_running = true;
+        coroutine_count += 1;
+        Vector3 rot = new Vector3(0, angle, 0);
+        Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
         while (Vector3.Angle(transform.forward, rotate_to) > 1)
         {
-            var rotation = Vector3.RotateTowards(transform.forward, rotate_to,  Time.deltaTime, 0.0f);
+            var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
             transform.rotation = Quaternion.LookRotation(rotation);
             yield return null;
         }
-        is_coroutine_running = false;
+        coroutine_count -= 1;
     }
+    IEnumerator OnGoto(Vector3 target)
+    {
+        coroutine_count += 1;
+        var step = moveSpeed * Time.deltaTime; // calculate distance to move
+        bool init_toggle_collide = toggle_collide;
+        // if collide, break coroutine
+        while (Vector3.Distance(transform.position, target) > 0.1 || toggle_collide == init_toggle_collide)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, step);
+            yield return null;
+        }
+        coroutine_count -= 1;
+    }
+    private List<ScanMeta> get_surrounding_objects(int split = 4)
+    {
+        /*
+        Spin clockwise
+        Turn 360 / split times and get list of object list
+        Return angle and object list
+        for example:
+
+                cup
+                 0
+
+        270     BOT       90
+
+                180
+
+        return [
+            (0, {"cup":1}),
+            (90, []),
+            (180, []),
+            (270, []),
+        ]
+        */
+        if (split < 1)
+        {
+            throw new System.ArgumentException("split should be at least one");
+        }
+        else if (split > 8)
+        {
+            throw new System.ArgumentException("split should be at most 8");
+        }
+        float angle = 360 / split;
+        float current_angle = 0;
+        List<ScanMeta> res = new List<ScanMeta>();
+        for (int i = 0; i < split; i++)
+        {
+            Debug.Log("Rotating " + angle);
+            Dictionary<string, List<Transform>> cv_objects = scanObjects();
+            res.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
+            current_angle += angle;
+
+            // Rotate
+            Vector3 rot = new Vector3(0, angle, 0);
+            Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
+            // while (Vector3.Angle(transform.forward, rotate_to) > 1)
+            // {
+            //     var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
+            //     transform.rotation = Quaternion.LookRotation(rotation);
+            //     yield return null;
+            // }
+        }
+        return res;
+    }
+    // IEnumerator go_crowded_thread()
+    // {
+    //     coroutine_count += 1;
+    //     go_crowded();
+    //     coroutine_count -= 1;
+    // }
     public void go_crowded()
     {
-
+        // List<ScanMeta> scanMetas = get_surrounding_objects(4);
+        // int max_person = -1;
+        // int index_max_person = -1;
+        // for (int i = 0; i < scanMetas.Count; i++)
+        // {
+        //     ScanMeta scan_res = scanMetas[i];
+        //     if (scan_res.objects.ContainsKey("person") && scan_res.objects["person"].Count > max_person)
+        //     {
+        //         max_person = scan_res.objects["person"].Count;
+        //         index_max_person = i;
+        //     }
+        // }
+        // if (max_person == -1)
+        // {
+        //     Debug.Log("No person in sight");
+        //     return;
+        // }
+        // Vector3 centroid = new Vector3(0, 0, 0);
+        // foreach (Transform obj in scanMetas[index_max_person].objects["person"])
+        // {
+        //     centroid += obj.position;
+        // }
+        // centroid /= max_person;
+        // OnGoto(centroid);
     }
 
 }

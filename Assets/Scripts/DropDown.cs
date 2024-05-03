@@ -37,6 +37,9 @@ public class DropDown : MonoBehaviour
             case 8:
                 playerController.follow();
                 break;
+            case 9:
+                playerController.go_crowded();
+                break;
         }
     }
 }
