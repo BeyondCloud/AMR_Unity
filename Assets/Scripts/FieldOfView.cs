@@ -16,8 +16,13 @@ public class FieldOfView : MonoBehaviour
     public class Target
     {
         public string name;
-        public Transform transform=new GameObject( ).transform;
+        public Transform transform;
         public bool canSee=false;
+        public Target(string name, Transform transform)
+        {
+            this.name = name;
+            this.transform = transform;
+        }
     }
     public Target[] targets;
 
@@ -28,8 +33,7 @@ public class FieldOfView : MonoBehaviour
         targets = new Target[targetRefs.Length];
         for (int i = 0; i < targets.Length; i++)
         {
-            targets[i] = new Target();
-            targets[i].name = targetRefs[i].name;
+            targets[i] = new Target(targetRefs[i].name, targetRefs[i].transform);
         }
     }
 
