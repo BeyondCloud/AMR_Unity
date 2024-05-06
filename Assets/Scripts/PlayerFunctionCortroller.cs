@@ -333,7 +333,14 @@ public class PlayerFunctionCortroller : MonoBehaviour
         for (int i = 0; i < split; i++)
         {
             Dictionary<string, List<Vector3>> cv_objects = scanObjects();
-            Debug.Log("Found " + cv_objects.Count + " objects");
+            if (cv_objects.ContainsKey("person"))
+            {
+                Debug.Log("Found " + cv_objects["person"].Count + " person(s)");
+            }
+            else
+            {
+                Debug.Log("Found 0 person(s)");
+            }
             scanMetas.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
             current_angle += angle;
             yield return new WaitForCompletion(_Rotate(angle));
