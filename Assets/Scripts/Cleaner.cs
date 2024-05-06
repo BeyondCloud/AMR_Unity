@@ -18,4 +18,8 @@ public class Cleaner : MonoBehaviour
             power += charge_rate * Time.deltaTime; 
         }
     }
+    public int GetBatteryPercentage()
+    {
+        return Mathf.RoundToInt(100*(power / max_power));
+    }
 }

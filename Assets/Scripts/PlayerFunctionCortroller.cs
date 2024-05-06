@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 using System.Collections;
+using Unity.VisualScripting;
+using System.Runtime.CompilerServices;
 
 public class WaitForCompletion : CustomYieldInstruction
 {
@@ -34,31 +34,35 @@ public class PlayerFunctionCortroller : MonoBehaviour
 {
     // public enum Cmd
     // {
-    //     idle = 0,
+    //     idle = 0,     //stop == idle
     //     go_forward =1,
     //     go_back =2,
     //     go_right =3,
     //     go_left =4,
-    //     go_crowded =5,   Done
+    //     go_crowded =5,   
     //     go_charge =6,
     //     spin_right =7,
     //     spin_left =8,
-    //     follow =9,    DONE
-    //     echo_seen_object =10,   DONE
-    //     find =11,
+    //     follow =9,    
+    //     echo_seen_object =10,   
     //     get_battery_percentage =12,
-    //     dance =13,
     //     get_speed =14,
+
+    //     find =11, <<<<<<
+    //     dance =13,
+
+
+
+    // OTHERS
     //     set_speed =15,
-    //     stop =16,
-    //     print=17,
     //     error=18
+    //     print=17,
     // }
 
     [Header("Movement")]
     public float spin_direction = 0;
     private float spin_speed = 100;
-    public float moveSpeed;
+
 
     public float groundDrag;
 
@@ -87,8 +91,11 @@ public class PlayerFunctionCortroller : MonoBehaviour
     private FieldOfView fov;
     private Follower follower;
     private int coroutine_count = 0;
-    private float speedLevel;
+    private int moveSpeed = 400;
     private PlayerKeyboardController playerController;
+    private Cleaner cleaner;
+    
+    private Animator anim;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -97,6 +104,9 @@ public class PlayerFunctionCortroller : MonoBehaviour
         fov = GetComponent<FieldOfView>();
         follower = GetComponent<Follower>();
         playerController = GetComponent<PlayerKeyboardController>();
+        cleaner = GetComponent<Cleaner>();
+        anim = GetComponent<Animator>();
+
     }
 
     private void Update()
@@ -177,18 +187,25 @@ public class PlayerFunctionCortroller : MonoBehaviour
         Stop();
         verticalInput = -1;
     }
-    IEnumerator _GoRight()
+    IEnumerator Rotate(float degree)
     {
         Stop();
-        yield return new WaitForCompletion(Rotate(90));
-        verticalInput = 1;
+        yield return new WaitForCompletion(_Rotate(degree));
+        
     }
     public void GoRight()
     {
-        StartCoroutine(_GoRight());
+        StartCoroutine(Rotate(90));
+        verticalInput = 1;
+    }
+    public void GoLeft()
+    {
+        StartCoroutine(Rotate(-90));
+        verticalInput = 1;
     }
     public void Stop()
     {
+        anim.enabled = false;
         agent.enabled = true;
         navigation.SetIdle();
         agent.enabled = false;
@@ -196,6 +213,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         horizontalInput = 0;
         spin_direction = 0;
         follower.Reset();
+        anim.SetBool("dance",false);
     }
     public void SpinRight()
     {
@@ -251,6 +269,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Follow()
     {
+        Stop();
         float min_distance = 1000;
         int min_idx = -1;
         for (int i = 0; i < fov.targetsInView.Count; i++)
@@ -274,7 +293,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             follower.SetTarget(fov.targetsInView[min_idx].position);
         }
     }
-    IEnumerator Rotate(float angle)
+    IEnumerator _Rotate(float angle)
     {
         Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
         while (Vector3.Angle(transform.forward, rotate_to) > 1)
@@ -307,7 +326,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             Debug.Log("Found " + cv_objects.Count + " objects");
             scanMetas.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
             current_angle += angle;
-            yield return new WaitForCompletion(Rotate(angle));
+            yield return new WaitForCompletion(_Rotate(angle));
         }
 
         // find most crowded area
@@ -344,7 +363,29 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void GoCrowded()
     {
+        Stop();
         StartCoroutine(go_crowded_routine());
+    }
+    public int GetBatteryPercentage()
+    {
+        int res = cleaner.GetBatteryPercentage();
+        Debug.Log("Battery percentage: " + res + "%");
+        return res;
+    }
+    public void SetSpeedLevel(int speedLevel)
+    {
+        playerController.speedLevel = speedLevel;
+    }
+    public int GetSpeedLevel()
+    {
+        return playerController.speedLevel;
+    }
+    public void Dance()
+    {
+        Stop();
+        anim.enabled = true;
+        anim.SetBool("dance",true);
+        Debug.Log("Dancing");
     }
 
 }

@@ -1326,6 +1326,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: b36dbcc8ef8059c4a9c8f753d6b0350b, type: 3}
   m_PrefabInstance: {fileID: 1757135294}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &522892315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 522892316}
+  m_Layer: 0
+  m_Name: CleanerParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &522892316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522892315}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.06, y: 0, z: -5.85}
+  m_LocalScale: {x: 1, y: 0.15, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &524143964
 GameObject:
   m_ObjectHideFlags: 0
@@ -2782,6 +2813,14 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: go_right
       m_Image: {fileID: 0}
+    - m_Text: go_left
+      m_Image: {fileID: 0}
+    - m_Text: get_battery %
+      m_Image: {fileID: 0}
+    - m_Text: get_speedlevel
+      m_Image: {fileID: 0}
+    - m_Text: dance
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -3671,6 +3710,7 @@ GameObject:
   - component: {fileID: 1223174453}
   - component: {fileID: 1223174441}
   - component: {fileID: 1223174447}
+  - component: {fileID: 1223174455}
   m_Layer: 0
   m_Name: Cleaner
   m_TagString: Player
@@ -3764,7 +3804,7 @@ Transform:
   m_GameObject: {fileID: 1223174440}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.06, y: -0.61, z: -5.85}
+  m_LocalPosition: {x: -8.06, y: 0, z: -5.85}
   m_LocalScale: {x: 1, y: 0.15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3877,7 +3917,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spin_direction: 0
-  moveSpeed: 400
   groundDrag: 7
   airMultiplier: 0.03
   walkSpeed: 0
@@ -3958,6 +3997,27 @@ MonoBehaviour:
   isFollowing: 0
   nearDistance: 1.5
   rotate_speed: 1
+--- !u!95 &1223174455
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223174440}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a56670e6255ea4445bc94a8154c683d1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1227221018
 GameObject:
   m_ObjectHideFlags: 0
@@ -4537,7 +4597,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 0, y: 250}
+  m_SizeDelta: {x: 0, y: 350}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1403371658
 MonoBehaviour:
@@ -7241,6 +7301,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2066785512}
+  - {fileID: 522892316}
   - {fileID: 1223174445}
   - {fileID: 10073085}
   - {fileID: 681970113}

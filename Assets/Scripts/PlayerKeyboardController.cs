@@ -178,4 +178,5 @@ public class PlayerKeyboardController : MonoBehaviour
         speedLevel = Mathf.Clamp(speedLevel, 1, maxSpeedLevel);
         moveSpeed = baseSpeed * speedLevel;
     }
+    
 }

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class DropDown : MonoBehaviour
@@ -42,6 +39,18 @@ public class DropDown : MonoBehaviour
                 break;
             case 10:
                 playerController.GoRight();
+                break;
+            case 11:
+                playerController.GoLeft();
+                break;
+            case 12:
+                playerController.GetBatteryPercentage();
+                break;
+            case 13:
+                playerController.GetSpeedLevel();
+                break;
+            case 14:
+                playerController.Dance();
                 break;
         }
     }
