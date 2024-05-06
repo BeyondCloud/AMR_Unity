@@ -47,9 +47,10 @@ public class PlayerFunctionCortroller : MonoBehaviour
     //     echo_seen_object =10,   
     //     get_battery_percentage =12,
     //     get_speed =14,
+    //     dance =13,
 
     //     find =11, <<<<<<
-    //     dance =13,
+
 
 
 
@@ -253,21 +254,20 @@ public class PlayerFunctionCortroller : MonoBehaviour
         string log = "";
         foreach (var item in dict)
         {
-            log += item.Value.Count + " " + item.Key + "\n";
+            log += item.Value.Count + " " + item.Key + " ";
         }
         if (log == "")
             Debug.Log("No objects in sight");
         else
-            Debug.Log("I see a" + log);
+            Debug.Log("I see:\n" + log);
     }
-    public void Follow()
+    public Vector3? FindObject(string target_name)
     {
-        Stop();
         float min_distance = 1000;
         int min_idx = -1;
         for (int i = 0; i < fov.targetsInView.Count; i++)
         {
-            if (fov.targetsInView[i].name == "person")
+            if (fov.targetsInView[i].name == target_name)
             {
                 float distance = Vector3.Distance(
                             transform.position,
@@ -282,9 +282,27 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         if (min_idx != -1)
         {
-            Debug.Log("Following " + fov.targetsInView[min_idx].name);
-            follower.SetTarget(fov.targetsInView[min_idx].position);
+            return fov.targetsInView[min_idx].position;
         }
+        return null;
+    }
+    public void Find(string target_name)
+    {
+        Stop();
+        var pos = FindObject(target_name);
+        if (pos != null)
+        {
+            follower.SetTarget((Vector3)pos);
+        }
+        else
+        {
+            Debug.Log("No " + target_name + " in sight");
+        }
+    }
+    public void Follow()
+    {
+        Stop();
+        Find("person");
     }
     IEnumerator _Rotate(float angle)
     {

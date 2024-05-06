@@ -35,6 +35,7 @@ public class Follower : MonoBehaviour
     }
     public void SetTarget(Vector3 newTarget)
     {
+        newTarget.y = transform.position.y;
         target = newTarget;
         isFollowing = true;
     }

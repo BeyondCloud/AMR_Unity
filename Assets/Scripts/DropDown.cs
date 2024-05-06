@@ -52,6 +52,9 @@ public class DropDown : MonoBehaviour
             case 14:
                 playerController.Dance();
                 break;
+            case 15:
+                playerController.Find("book");
+                break;
         }
     }
 }
