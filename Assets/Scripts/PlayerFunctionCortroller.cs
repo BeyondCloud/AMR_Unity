@@ -6,7 +6,20 @@ using UnityEngine.AI;
 using UnityEngine.UIElements;
 using System.Collections;
 
+public class WaitForCompletion : CustomYieldInstruction
+{
+    IEnumerator coroutine;
 
+    public WaitForCompletion(IEnumerator coroutine)
+    {
+        this.coroutine = coroutine;
+    }
+
+    public override bool keepWaiting
+    {
+        get { return coroutine.MoveNext(); }
+    }
+}
 public class ScanMeta
 {
     public float angle;
@@ -84,7 +97,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
         fov = GetComponent<FieldOfView>();
         follower = GetComponent<Follower>();
         playerController = GetComponent<PlayerKeyboardController>();
-        // StartCoroutine(OnRotate(90));
     }
 
     private void Update()
@@ -165,6 +177,16 @@ public class PlayerFunctionCortroller : MonoBehaviour
         Stop();
         verticalInput = -1;
     }
+    IEnumerator _GoRight()
+    {
+        Stop();
+        yield return new WaitForCompletion(Rotate(90));
+        verticalInput = 1;
+    }
+    public void GoRight()
+    {
+        StartCoroutine(_GoRight());
+    }
     public void Stop()
     {
         agent.enabled = true;
@@ -186,14 +208,14 @@ public class PlayerFunctionCortroller : MonoBehaviour
         spin_direction = -1;
     }
 
-    public void gotoKitchen()
+    public void GotoKitchen()
     {
         Stop();
         agent.enabled = true;
         navigation.GoToKitchen();
     }
 
-    public void gotoCharge()
+    public void GotoCharge()
     {
         Stop();
         agent.enabled = true;
@@ -214,7 +236,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         return dict;
     }
-    public void echoSeenObjects()
+    public void EchoSeenObjects()
     {
         Dictionary<string, List<Vector3>> dict = scanObjects();
         string log = "";
@@ -227,7 +249,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         else
             Debug.Log("I see a" + log);
     }
-    public void follow()
+    public void Follow()
     {
         float min_distance = 1000;
         int min_idx = -1;
@@ -252,6 +274,17 @@ public class PlayerFunctionCortroller : MonoBehaviour
             follower.SetTarget(fov.targetsInView[min_idx].position);
         }
     }
+    IEnumerator Rotate(float angle)
+    {
+        Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
+        while (Vector3.Angle(transform.forward, rotate_to) > 1)
+        {
+            var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
+            transform.rotation = Quaternion.LookRotation(rotation);
+            yield return null;
+        } 
+    }
+
     IEnumerator go_crowded_routine()
     {
         coroutine_count += 1;
@@ -274,15 +307,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             Debug.Log("Found " + cv_objects.Count + " objects");
             scanMetas.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
             current_angle += angle;
-
-            // OnRotate
-            Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
-            while (Vector3.Angle(transform.forward, rotate_to) > 1)
-            {
-                var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
-                transform.rotation = Quaternion.LookRotation(rotation);
-                yield return null;
-            }
+            yield return new WaitForCompletion(Rotate(angle));
         }
 
         // find most crowded area
@@ -317,7 +342,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         follower.Reset();
         coroutine_count -= 1;
     }
-    public void go_crowded()
+    public void GoCrowded()
     {
         StartCoroutine(go_crowded_routine());
     }

@@ -26,19 +26,22 @@ public class DropDown : MonoBehaviour
                 playerController.SpinLeft();
                 break;
             case 5:
-                playerController.gotoKitchen();
+                playerController.GotoKitchen();
                 break;
             case 6:
-                playerController.gotoCharge();
+                playerController.GotoCharge();
                 break;
             case 7:
-                playerController.echoSeenObjects();
+                playerController.EchoSeenObjects();
                 break;
             case 8:
-                playerController.follow();
+                playerController.Follow();
                 break;
             case 9:
-                playerController.go_crowded();
+                playerController.GoCrowded();
+                break;
+            case 10:
+                playerController.GoRight();
                 break;
         }
     }
