@@ -93,7 +93,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
     private int moveSpeed = 400;
     private PlayerKeyboardController playerController;
     private Cleaner cleaner;
-    private bool isDancing = false;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -180,7 +179,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
         horizontalInput = 0;
         spin_direction = 0;
         follower.Reset();
-        isDancing = false;
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
     }
     public void GoForward()
@@ -367,25 +365,28 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void SetSpeedLevel(int speedLevel)
     {
+        Debug.Log("Current Speed Level: " + speedLevel);
         playerController.speedLevel = speedLevel;
     }
     public int GetSpeedLevel()
     {
-        return playerController.speedLevel;
+        var speed_level = playerController.speedLevel;
+        Debug.Log("Current Speed level: " + speed_level);
+        return speed_level;
     }
     IEnumerator dance_routine()
     {
-        while (isDancing)
+        while (true)
         {
-            transform.Rotate(0, 1, 0, Space.Self);
-            yield return null;
+            yield return new WaitForCompletion(_Rotate(45));
+            yield return new WaitForCompletion(_Rotate(-90));
+            yield return new WaitForCompletion(_Rotate(45));
         }
     }
     public void Dance()
     {
         Stop();
-        isDancing = true;
-        Debug.Log("Dancing");
+        StartCoroutine(dance_routine());
     }
 
 }
