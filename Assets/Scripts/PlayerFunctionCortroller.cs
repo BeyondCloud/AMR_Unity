@@ -90,12 +90,10 @@ public class PlayerFunctionCortroller : MonoBehaviour
     private Navigation navigation;
     private FieldOfView fov;
     private Follower follower;
-    private int coroutine_count = 0;
     private int moveSpeed = 400;
     private PlayerKeyboardController playerController;
     private Cleaner cleaner;
-    
-    private Animator anim;
+    private bool isDancing = false;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -105,8 +103,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
         follower = GetComponent<Follower>();
         playerController = GetComponent<PlayerKeyboardController>();
         cleaner = GetComponent<Cleaner>();
-        anim = GetComponent<Animator>();
-
     }
 
     private void Update()
@@ -122,9 +118,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (coroutine_count > 0)
-            return;
-
         MovePlayer();
         SpinPlayer();
     }
@@ -177,6 +170,19 @@ public class PlayerFunctionCortroller : MonoBehaviour
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
+    public void Stop()
+    {
+        StopAllCoroutines();
+        agent.enabled = true;
+        navigation.SetIdle();
+        agent.enabled = false;
+        verticalInput = 0;
+        horizontalInput = 0;
+        spin_direction = 0;
+        follower.Reset();
+        isDancing = false;
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+    }
     public void GoForward()
     {
         Stop();
@@ -189,32 +195,21 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     IEnumerator Rotate(float degree)
     {
-        Stop();
         yield return new WaitForCompletion(_Rotate(degree));
-        
     }
     public void GoRight()
     {
+        Stop();
         StartCoroutine(Rotate(90));
         verticalInput = 1;
     }
     public void GoLeft()
     {
+        Stop();
         StartCoroutine(Rotate(-90));
         verticalInput = 1;
     }
-    public void Stop()
-    {
-        anim.enabled = false;
-        agent.enabled = true;
-        navigation.SetIdle();
-        agent.enabled = false;
-        verticalInput = 0;
-        horizontalInput = 0;
-        spin_direction = 0;
-        follower.Reset();
-        anim.SetBool("dance",false);
-    }
+
     public void SpinRight()
     {
         Stop();
@@ -306,7 +301,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
 
     IEnumerator go_crowded_routine()
     {
-        coroutine_count += 1;
         List<ScanMeta> scanMetas = new List<ScanMeta>();
         int split = 4;
         // get surrounding objects
@@ -359,7 +353,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
             yield return null;
         }
         follower.Reset();
-        coroutine_count -= 1;
     }
     public void GoCrowded()
     {
@@ -380,11 +373,18 @@ public class PlayerFunctionCortroller : MonoBehaviour
     {
         return playerController.speedLevel;
     }
+    IEnumerator dance_routine()
+    {
+        while (isDancing)
+        {
+            transform.Rotate(0, 1, 0, Space.Self);
+            yield return null;
+        }
+    }
     public void Dance()
     {
         Stop();
-        anim.enabled = true;
-        anim.SetBool("dance",true);
+        isDancing = true;
         Debug.Log("Dancing");
     }
 
