@@ -258,7 +258,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         else
             Debug.Log("I see:\n" + log);
     }
-    public Vector3? FindObject(string target_name)
+    public Vector3? getObjectPosition(string target_name)
     {
         float min_distance = 1000;
         int min_idx = -1;
@@ -286,7 +286,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void Find(string target_name)
     {
         Stop();
-        var pos = FindObject(target_name);
+        var pos = getObjectPosition(target_name);
         if (pos != null)
         {
             follower.SetTarget((Vector3)pos);
