@@ -16,11 +16,11 @@ public class FieldOfView : MonoBehaviour
     public class Target
     {
         public string name;
-        public Vector3 position;
-        public Target(string name, Vector3 position)
+        public Transform transform;
+        public Target(string name, Transform transform)
         {
             this.name = name;
-            this.position = position;
+            this.transform = transform;
         }
     }
     // public Target[] targets;
@@ -64,7 +64,7 @@ public class FieldOfView : MonoBehaviour
                     float distance = Vector3.Distance(transform.position, target.position);
                     if (!Physics.Raycast(transform.position, direction, distance, obstructionMask))
                     {
-                        Target t = new Target(rangeChecks[i].gameObject.name, target.position);
+                        Target t = new Target(rangeChecks[i].gameObject.name, target);
                         targetsInView.Add(t);
                     }
                 }

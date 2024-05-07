@@ -240,7 +240,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             {
                 dict[fov.targetsInView[i].name] = new List<Vector3>();
             }
-            dict[fov.targetsInView[i].name].Add(fov.targetsInView[i].position);
+            dict[fov.targetsInView[i].name].Add(fov.targetsInView[i].transform.position);
 
         }
         return dict;
@@ -258,7 +258,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         else
             Debug.Log("I see:\n" + log);
     }
-    public Vector3? getObjectPosition(string target_name)
+    public int getFovNearestObjID(string target_name)
     {
         float min_distance = 1000;
         int min_idx = -1;
@@ -268,7 +268,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             {
                 float distance = Vector3.Distance(
                             transform.position,
-                            fov.targetsInView[i].position
+                            fov.targetsInView[i].transform.position
                         );
                 if (distance < min_distance)
                 {
@@ -279,17 +279,17 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         if (min_idx != -1)
         {
-            return fov.targetsInView[min_idx].position;
+            return min_idx;
         }
-        return null;
+        return -1;
     }
     public void Find(string target_name)
     {
         Stop();
-        var pos = getObjectPosition(target_name);
-        if (pos != null)
+        int id = getFovNearestObjID(target_name);
+        if (id != -1)
         {
-            follower.SetTarget((Vector3)pos);
+            follower.SetTarget(fov.targetsInView[id].transform);
         }
         else
         {

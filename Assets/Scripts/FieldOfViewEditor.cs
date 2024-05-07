@@ -21,7 +21,7 @@ public class FieldOfViewEditor : Editor
         Handles.color = Color.green;
         for (int i = 0;i < fov.targetsInView.Count;i++)
         {
-            Handles.DrawLine(fov.transform.position, fov.targetsInView[i].position);
+            Handles.DrawLine(fov.transform.position, fov.targetsInView[i].transform.position);
         }
     }
 
