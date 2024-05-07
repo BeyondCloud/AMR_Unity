@@ -256,7 +256,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         if (log == "")
             Debug.Log("No objects in sight");
         else
-            Debug.Log("I see:\n" + log);
+            Debug.Log("I see " + log);
     }
     public int getFovNearestObjID(string target_name)
     {
