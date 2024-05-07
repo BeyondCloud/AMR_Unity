@@ -48,10 +48,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     //     get_battery_percentage =12,
     //     get_speed =14,
     //     dance =13,
-
-    //     find =11, <<<<<<
-
-
+    //     find =11, 
 
 
     // OTHERS
@@ -314,8 +311,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             yield return null;
         } 
     }
-
-    IEnumerator go_crowded_routine()
+    IEnumerator find_surrounding(string target)
     {
         List<ScanMeta> scanMetas = new List<ScanMeta>();
         int split = 4;
@@ -330,45 +326,35 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         float angle = 360 / split;
         float current_angle = 0;
+        List<Vector3> objectsInMaxAngle = new List<Vector3>();
         for (int i = 0; i < split; i++)
         {
             Dictionary<string, List<Vector3>> cv_objects = scanObjects();
-            if (cv_objects.ContainsKey("person"))
-            {
-                Debug.Log("Found " + cv_objects["person"].Count + " person(s)");
-            }
+            if (cv_objects.ContainsKey(target))
+                Debug.Log("Found " + cv_objects[target].Count + " " + target +"(s)");
             else
+                Debug.Log("Found 0 " + target + "(s)");
+
+            if (cv_objects.ContainsKey(target) && cv_objects[target].Count > objectsInMaxAngle.Count)
             {
-                Debug.Log("Found 0 person(s)");
+                objectsInMaxAngle = cv_objects[target];
             }
-            scanMetas.Add(new ScanMeta(angle: current_angle, objects: cv_objects));
             current_angle += angle;
             yield return new WaitForCompletion(_Rotate(angle));
         }
 
         // find most crowded area
-        int max_person = -1;
-        int index_max_person = -1;
-        for (int i = 0; i < scanMetas.Count; i++)
+        if (objectsInMaxAngle.Count == 0)
         {
-            ScanMeta scan_res = scanMetas[i];
-            if (scan_res.objects.ContainsKey("person") && scan_res.objects["person"].Count > max_person)
-            {
-                max_person = scan_res.objects["person"].Count;
-                index_max_person = i;
-            }
-        }
-        if (max_person == -1)
-        {
-            Debug.Log("No person in sight");
+            Debug.Log("No "+target+" in sight");
             yield break;
         }
         Vector3 centroid = new Vector3(0, 0, 0);
-        foreach (Vector3 obj in scanMetas[index_max_person].objects["person"])
+        foreach (Vector3 obj in objectsInMaxAngle)
         {
             centroid += obj;
         }
-        centroid /= max_person;
+        centroid /= objectsInMaxAngle.Count;
         //OnGoto
         follower.SetTarget(centroid);
         while (follower.isFollowing)
@@ -380,7 +366,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void GoCrowded()
     {
         Stop();
-        StartCoroutine(go_crowded_routine());
+        StartCoroutine(find_surrounding("person"));
     }
     public int GetBatteryPercentage()
     {
