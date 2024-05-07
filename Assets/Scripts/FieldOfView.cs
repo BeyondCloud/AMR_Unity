@@ -16,7 +16,7 @@ public class FieldOfView : MonoBehaviour
     public class Target
     {
         public string name;
-        public Transform transform;
+        public readonly Transform transform;
         public Target(string name, Transform transform)
         {
             this.name = name;
