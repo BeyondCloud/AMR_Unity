@@ -7,11 +7,12 @@ public class Follower : MonoBehaviour
     public float nearDistance = 1.5f;
     public float rotate_speed = 1.0f;
     private float distance;
-    private Transform dummyTarget;
+    private GameObject dummyTarget;
     private PlayerKeyboardController playerController;
     void Start()
     {
         playerController = GetComponent<PlayerKeyboardController>();
+        dummyTarget = new GameObject();
     }
     // Update is called once per frame
     void Update()
@@ -44,8 +45,8 @@ public class Follower : MonoBehaviour
     
     public void SetTarget(Vector3 newTarget)
     {
-        dummyTarget.position = newTarget;
-        target = dummyTarget;
+        dummyTarget.transform.position = newTarget;
+        target = dummyTarget.transform;
         isFollowing = true;
     }
     
