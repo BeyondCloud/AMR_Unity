@@ -36,7 +36,7 @@ public class SimpleHttpServer : MonoBehaviour
             listener.Start();
             isRunning = true;
             Listen();
-            Debug.Log("Server started on /" + url);
+            Debug.Log("Server started: " + url);
         }
         catch (Exception e)
         {

@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Navigation.cs" />
     <Compile Include="Assets\Scripts\server.cs" />
     <Compile Include="Assets\Scripts\PlayerCam.cs" />
+    <Compile Include="Assets\Scripts\DebugToText.cs" />
     <Compile Include="Assets\Scripts\FollowTargetCam.cs" />
     <Compile Include="Assets\Scripts\BatteryUI.cs" />
     <Compile Include="Assets\Scripts\FieldOfViewEditor.cs" />
