@@ -7,6 +7,7 @@ public class DebugToText : MonoBehaviour
 {
     private TextMeshProUGUI mText; 
     public float fadeDuration = 0.5f;
+    private Coroutine fadeRoutine;
     void Awake()
     {
         Application.logMessageReceived += LogCallback;
@@ -24,7 +25,9 @@ public class DebugToText : MonoBehaviour
     private void LogCallback(string message, string stackTrace, LogType type)
     {
         mText.text = message;
-        StartCoroutine(IntroFade(mText));
+        if (fadeRoutine != null)
+            StopCoroutine(fadeRoutine);
+        fadeRoutine = StartCoroutine(IntroFade(mText));
     }
     private IEnumerator IntroFade (TextMeshProUGUI textToUse) {
         yield return StartCoroutine(FadeTextToFullAlpha(fadeDuration, mText));
