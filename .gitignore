@@ -5,6 +5,6 @@ Packages
 ProjectSettings
 UserSettings
 Temp
-*.sln
-*.csproj
+.sln
+.csproj
 *.asset
