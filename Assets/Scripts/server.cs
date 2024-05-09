@@ -18,7 +18,7 @@ public class SimpleHttpServer : MonoBehaviour
     public string port="8000";
     void Start()
     {
-        string url = "http://" + ip + ":" + port + "/";
+        string url = $"http://{ip}:{port}/";
         StartServer(url);
     }
 

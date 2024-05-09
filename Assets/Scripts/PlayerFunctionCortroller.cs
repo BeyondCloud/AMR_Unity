@@ -174,7 +174,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
-    public void Stop()
+    public void Reset()
     {
         StopAllCoroutines();
         agent.enabled = true;
@@ -193,12 +193,12 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void GoForward()
     {
-        Stop();
+        Reset();
         verticalInput = 1;
     }
     public void GoBack()
     {
-        Stop();
+        Reset();
         verticalInput = -1;
     }
     IEnumerator Rotate(float degree)
@@ -207,31 +207,31 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void GoRight()
     {
-        Stop();
+        Reset();
         StartCoroutine(Rotate(90));
         verticalInput = 1;
     }
     public void GoLeft()
     {
-        Stop();
+        Reset();
         StartCoroutine(Rotate(-90));
         verticalInput = 1;
     }
 
     public void SpinRight()
     {
-        Stop();
+        Reset();
         spin_direction = 1;
     }
     public void SpinLeft()
     {
-        Stop();
+        Reset();
         spin_direction = -1;
     }
 
     public void Goto(string place)
     {
-        Stop();
+        Reset();
         agent.enabled = true;
         navigation.SetTarget(place);
     }
@@ -290,7 +290,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Find(string target_name)
     {
-        Stop();
+        Reset();
         int id = getFovNearestObjID(target_name);
         if (id != -1)
         {
@@ -303,7 +303,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Follow()
     {
-        Stop();
+        Reset();
         Find("person");
     }
     IEnumerator _Rotate(float angle)
@@ -371,7 +371,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void GoCrowded()
     {
-        Stop();
+        Reset();
         StartCoroutine(find_surrounding("person"));
     }
     public int GetBatteryPercentage()
@@ -402,7 +402,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Dance()
     {
-        Stop();
+        Reset();
         StartCoroutine(dance_routine());
     }
 

@@ -91,7 +91,7 @@ public class PlayerKeyboardController : MonoBehaviour
         // if any key is up
         if (Input.GetKeyUp(KeyCode.Q) || Input.GetKeyUp(KeyCode.E))
         {
-            playerController.Stop();
+            playerController.Reset();
         }
         
     }

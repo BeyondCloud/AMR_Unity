@@ -27,6 +27,7 @@ public class Navigation : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.enabled = false;
     }
 
     // Update is called once per frame
@@ -66,7 +67,7 @@ public class Navigation : MonoBehaviour
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
-                    playerController.Stop();
+                    playerController.Reset();
                 }
             }
         }
@@ -77,6 +78,7 @@ public class Navigation : MonoBehaviour
     }
     public void SetTarget(string place)
     {
+        Debug.Log("SetTarget:"+place);
         switch(place)
         {
             case "kitchen":

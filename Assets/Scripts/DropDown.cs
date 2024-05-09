@@ -8,7 +8,7 @@ public class DropDown : MonoBehaviour
         switch (val)
         {
             case 0:
-                playerController.Stop();
+                playerController.Reset();
                 break;
             case 1:
                 playerController.GoForward();
