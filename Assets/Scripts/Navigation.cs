@@ -65,24 +65,28 @@ public class Navigation : MonoBehaviour
     {
         places = PlacesEmum.idle;
     }
-    public void GoToKitchen()
+    public void SetTarget(string place)
     {
-        places = PlacesEmum.kitchen;
-    }
-    public void GoToLivingRoom()
-    {
-        places = PlacesEmum.livingRoom;
-    }
-    public void GoToBathroom()
-    {
-        places = PlacesEmum.bathroom;
-    }
-    public void GoToBedroom()
-    {
-        places = PlacesEmum.bedroom;
-    }
-    public void GoToCharge()
-    {
-        places = PlacesEmum.charge;
+        switch(place)
+        {
+            case "kitchen":
+                places = PlacesEmum.kitchen;
+                break;
+            case "livingRoom":
+                places = PlacesEmum.livingRoom;
+                break;
+            case "bathroom":
+                places = PlacesEmum.bathroom;
+                break;
+            case "bedroom":
+                places = PlacesEmum.bedroom;
+                break;
+            case "charge":
+                places = PlacesEmum.charge;
+                break;
+            default:
+                Debug.Log("Invalid place:"+place);
+                break;
+        }
     }
 }

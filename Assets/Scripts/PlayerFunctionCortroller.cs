@@ -217,18 +217,11 @@ public class PlayerFunctionCortroller : MonoBehaviour
         spin_direction = -1;
     }
 
-    public void GotoKitchen()
+    public void Goto(string place)
     {
         Stop();
         agent.enabled = true;
-        navigation.GoToKitchen();
-    }
-
-    public void GotoCharge()
-    {
-        Stop();
-        agent.enabled = true;
-        navigation.GoToCharge();
+        navigation.SetTarget(place);
     }
     private Dictionary<string, List<Vector3>> scanObjects()
     {

@@ -23,10 +23,10 @@ public class DropDown : MonoBehaviour
                 playerController.SpinLeft();
                 break;
             case 5:
-                playerController.GotoKitchen();
+                playerController.Goto("kitchen");
                 break;
             case 6:
-                playerController.GotoCharge();
+                playerController.Goto("charge");
                 break;
             case 7:
                 playerController.EchoSeenObjects();

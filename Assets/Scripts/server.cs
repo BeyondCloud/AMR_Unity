@@ -7,7 +7,7 @@ using UnityEngine;
 public class SimpleHttpServer : MonoBehaviour
 {
     public GameObject player;
-    private Navigation platerNavigation;
+    public PlayerFunctionCortroller controller;
     private HttpListener listener;
     private bool isRunning = false;
 
@@ -24,7 +24,6 @@ public class SimpleHttpServer : MonoBehaviour
     void Start()
     {
         StartServer();
-        platerNavigation = player.GetComponent<Navigation>();
     }
 
     void OnApplicationQuit()
@@ -94,22 +93,8 @@ public class SimpleHttpServer : MonoBehaviour
         {
             string postData = reader.ReadToEnd();
             Debug.Log($"Received POST data at /goto: {postData}");
-            switch (postData.ToLower())
-            {
-                case "kitchen":
-                    platerNavigation.places = Navigation.PlacesEmum.kitchen;
-                    break;
-                case "livingroom":
-                    platerNavigation.places = Navigation.PlacesEmum.livingRoom;
-                    break;
-                case "bathroom":
-                    platerNavigation.places = Navigation.PlacesEmum.bathroom;
-                    break;
-                default:
-                    break;
-            }
-            // Process postData here as needed
-
+            var place = postData.ToLower();
+            controller.Goto(place);
             string responseString = $"/goto: {postData}";
             SendResponse(response, responseString, 200);
         }
