@@ -5,12 +5,10 @@ using UnityEngine;
 public class NPCMovement : MonoBehaviour
 {
     public float moveSpeed = 0.0f;
-    private Rigidbody rb;
     private Animator anim;
     Vector3 prevPos;
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         prevPos = transform.position;
     }   
