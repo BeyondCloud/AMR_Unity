@@ -66,11 +66,57 @@ public class SimpleHttpServer : MonoBehaviour
         {
             switch (request.Url.AbsolutePath)
             {
+                case "/go_forward":
+                    controller.GoForward();
+                    break;
+                case "/go_back":
+                    controller.GoBack();
+                    break;
+                case "/go_right":
+                    controller.GoRight();
+                    break;
+                case "/go_left":
+                    controller.GoLeft();
+                    break;
+                case "/go_crowded":
+                    controller.GoCrowded();
+                    break;
+                case "/go_charge":
+                    controller.Goto("charge");
+                    break;
+                case "/spin_right":
+                    controller.SpinRight();
+                    break;
+                case "/spin_left":
+                    controller.SpinLeft();
+                    break;
+                case "/follow":
+                    controller.Follow();
+                    break;
+                case "/echo_seen_object":
+                    controller.EchoSeenObjects();
+                    break;
+                case "/get_battery_percentage":
+                    controller.GetBatteryPercentage();
+                    break;
+                case "/get_speed":
+                    controller.GetSpeedLevel();
+                    break;
+                case "/dance":
+                    controller.Dance();
+                    break;
+                case "/find":
+                    Find(request, response);
+                    break;
                 case "/goto":
                     Goto(request, response);
                     break;
-                case "/go_forward":
-                    GoForward();
+                case "/set_speed":
+                    SetSpeed(request, response);
+                    break;
+                case "/print":
+                case "/error":
+                    Debug.Log(GetPostData(request));
                     break;
                 default:
                     SendResponse(response, "404 Not Found", 404);
@@ -88,20 +134,33 @@ public class SimpleHttpServer : MonoBehaviour
 
     private void Goto(HttpListenerRequest request, HttpListenerResponse response)
     {
-        // Process POST data for /goto
+        string place = GetPostData(request).ToLower();
+        controller.Goto(place);
+        string responseString = $"/goto: {place}";
+        SendResponse(response, responseString, 200);
+    }
+    private void Find(HttpListenerRequest request, HttpListenerResponse response)
+    {
+        string obj = GetPostData(request).ToLower();
+        controller.Find(obj);
+        string responseString = $"/find: {obj}";
+        SendResponse(response, responseString, 200);
+    }
+    private void SetSpeed(HttpListenerRequest request, HttpListenerResponse response)
+    {
+        int speedLevel = Int32.Parse(GetPostData(request));
+        controller.SetSpeedLevel(speedLevel);
+        string responseString = $"/setSpeedLevel: {speedLevel}";
+        SendResponse(response, responseString, 200);
+    }
+    string GetPostData(HttpListenerRequest request)
+    {
         using (StreamReader reader = new StreamReader(request.InputStream, request.ContentEncoding))
         {
             string postData = reader.ReadToEnd();
             Debug.Log($"Received POST data at /goto: {postData}");
-            var place = postData.ToLower();
-            controller.Goto(place);
-            string responseString = $"/goto: {postData}";
-            SendResponse(response, responseString, 200);
+            return postData;
         }
-    }
-    private void GoForward()
-    {
-        
     }
     private void SendResponse(HttpListenerResponse response, string responseString, int statusCode)
     {
