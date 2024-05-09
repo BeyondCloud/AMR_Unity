@@ -68,7 +68,6 @@
     <Compile Include="Assets\Scripts\ChargeStation.cs" />
     <Compile Include="Assets\Scripts\Trash\FollowPlayerCam.cs" />
     <Compile Include="Assets\Scripts\Navigation.cs" />
-    <Compile Include="Assets\Scripts\server.cs" />
     <Compile Include="Assets\Scripts\PlayerCam.cs" />
     <Compile Include="Assets\Scripts\DebugToText.cs" />
     <Compile Include="Assets\Scripts\FollowTargetCam.cs" />
@@ -85,6 +84,7 @@
     <Compile Include="Assets\AurynSky\Gems Ultimate Pack\Scripts\AnimationScript.cs" />
     <Compile Include="Assets\Scripts\FieldOfView.cs" />
     <Compile Include="Assets\Scripts\NPCMovement.cs" />
+    <Compile Include="Assets\Scripts\SimpleHttpServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
