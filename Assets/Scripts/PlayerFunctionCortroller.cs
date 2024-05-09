@@ -336,9 +336,9 @@ public class PlayerFunctionCortroller : MonoBehaviour
         {
             Dictionary<string, List<Vector3>> cv_objects = scanObjects();
             if (cv_objects.ContainsKey(target))
-                Debug.Log("Found " + cv_objects[target].Count + " " + target +"(s)");
+                Debug.Log($"Found {cv_objects[target].Count} {target}(s)");
             else
-                Debug.Log("Found 0 " + target + "(s)");
+                Debug.Log($"Found 0 {target}");
 
             if (cv_objects.ContainsKey(target) && cv_objects[target].Count > objectsInMaxAngle.Count)
             {
