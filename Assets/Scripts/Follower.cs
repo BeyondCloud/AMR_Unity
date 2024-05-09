@@ -6,6 +6,7 @@ public class Follower : MonoBehaviour
     public bool isFollowing = false;
     public float nearDistance = 1.5f;
     public float rotate_speed = 1.0f;
+    private float follow_speed = 1.5f;
     private float distance;
     private GameObject dummyTarget;
     private PlayerKeyboardController playerController;
@@ -34,7 +35,7 @@ public class Follower : MonoBehaviour
 
             newDirection.y = 0.0f;
             transform.rotation = Quaternion.LookRotation(newDirection);
-            transform.position = Vector3.MoveTowards(transform.position, modified_position, playerController.speedLevel * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, modified_position, follow_speed*playerController.speedLevel * Time.deltaTime);
         }
     }
     public void SetTarget(Transform newTarget)

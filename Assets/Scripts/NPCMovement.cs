@@ -7,16 +7,18 @@ public class NPCMovement : MonoBehaviour
     public float moveSpeed = 0.0f;
     private Rigidbody rb;
     private Animator anim;
-
+    Vector3 prevPos;
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        prevPos = transform.position;
     }   
     // Update is called once per frame
     void Update()
     {
-        moveSpeed = rb.velocity.magnitude;
-        anim.SetFloat("speed", moveSpeed);
+        float speed = Vector3.Distance(transform.position, prevPos)/Time.deltaTime;
+        anim.SetFloat("speed", speed);
+        prevPos = transform.position;
     }
 }
