@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,6 +23,7 @@ public class Navigation : MonoBehaviour
     public Transform bedroom;
     public Transform charge;
     private NavMeshAgent agent;
+    public PlayerFunctionCortroller playerController;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -59,6 +59,16 @@ public class Navigation : MonoBehaviour
                     break;
             }
             oldPlaces = places;
+        }
+        if (agent.enabled && !agent.pathPending)
+        {
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                {
+                    playerController.Stop();
+                }
+            }
         }
     }
     public void SetIdle()

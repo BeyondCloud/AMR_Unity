@@ -106,15 +106,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 3
     agentTypeID: 0
-    agentRadius: 0.5
+    agentRadius: 0.57
     agentHeight: 2
-    agentSlope: 45
+    agentSlope: 40.2
     agentClimb: 0.4
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.16666667
+    cellSize: 0.19
     manualTileSize: 0
     tileSize: 256
     buildHeightMesh: 0
@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 22270729b3ee95346857f627298c7752, type: 2}
 --- !u!1 &10073083
 GameObject:
   m_ObjectHideFlags: 0
@@ -3026,8 +3026,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.07378243, y: 0.009172178, z: 0.023444124}
-  m_Center: {x: -0.000025293828, y: -0.0074397223, z: 0.002202295}
+  m_Size: {x: 0.07378243, y: 0.0126388585, z: 0.023444124}
+  m_Center: {x: -0.000025293828, y: -0.009173057, z: 0.002202295}
 --- !u!4 &839008113 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000011760555468, guid: c90de59bff4939e4bbe4cd9324b0decc, type: 3}
@@ -4705,6 +4705,7 @@ MonoBehaviour:
   bathroom: {fileID: 639241770}
   bedroom: {fileID: 364750088}
   charge: {fileID: 1062824264}
+  playerController: {fileID: 1223174450}
 --- !u!195 &1223174449
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4712,7 +4713,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223174440}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
   m_Speed: 3.5
@@ -4740,6 +4741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spin_direction: 0
+  StopOnCollision: 0
   groundDrag: 7
   airMultiplier: 0.03
   walkSpeed: 0
@@ -4749,6 +4751,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   orientation: {fileID: 1531676991}
+  dropDown: {fileID: 1020326972}
   grounded: 0
 --- !u!114 &1223174451
 MonoBehaviour:
@@ -5395,7 +5398,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.123333335
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 6bdff20b7e77faa4db7cfd90420b5e65, type: 2}
   m_BuildHeightMesh: 0

@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using System.Collections;
 using Unity.VisualScripting;
 using System.Runtime.CompilerServices;
+using TMPro;
 
 public class WaitForCompletion : CustomYieldInstruction
 {
@@ -60,7 +61,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     [Header("Movement")]
     public float spin_direction = 0;
     private float spin_speed = 100;
-
+    public bool StopOnCollision = false;
 
     public float groundDrag;
 
@@ -91,6 +92,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     private int moveSpeed = 400;
     private PlayerKeyboardController playerController;
     private Cleaner cleaner;
+    public TMPro.TMP_Dropdown dropDown;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -120,6 +122,11 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
 
     public bool grounded = false;
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (StopOnCollision)
+            TaskComplete();
+    }
     private void OnCollisionStay(Collision collision)
     {
         if (grounded == false)
@@ -178,6 +185,11 @@ public class PlayerFunctionCortroller : MonoBehaviour
         spin_direction = 0;
         follower.Reset();
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        
+    }
+    public void TaskComplete()
+    {
+        dropDown.value = 0;
     }
     public void GoForward()
     {
@@ -355,6 +367,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             yield return null;
         }
         follower.Reset();
+        TaskComplete();
     }
     public void GoCrowded()
     {
