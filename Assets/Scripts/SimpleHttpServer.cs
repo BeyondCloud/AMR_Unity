@@ -163,6 +163,7 @@ public class SimpleHttpServer : MonoBehaviour
                     flag = FuncEnum.go_forward;
                     break;
                 case "/go_back":
+                case "/go_backward":
                     flag = FuncEnum.go_back;
                     break;
                 case "/go_right":

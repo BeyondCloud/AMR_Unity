@@ -96,6 +96,7 @@ public class Navigation : MonoBehaviour
                 places = PlacesEmum.bedroom;
                 break;
             case "charge_station":
+            case "charge":
                 places = PlacesEmum.charge;
                 break;
             default:
