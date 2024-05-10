@@ -203,20 +203,21 @@ public class SimpleHttpServer : MonoBehaviour
                     flag = FuncEnum.dance;
                     break;
                 case "/find":
-                    flag = FuncEnum.find;
                     funcCallArg = GetPostData(request).ToLower();
+                    flag = FuncEnum.find; // Make sure flag is set last to avoid race condition
                     break;
                 case "/goto":
-                    flag = FuncEnum._goto;
                     funcCallArg = GetPostData(request).ToLower();
+                    flag = FuncEnum._goto; // Make sure flag is set last to avoid race condition
                     break;
                 case "/set_speed":
-                    flag = FuncEnum.set_speed;
                     funcCallArg = GetPostData(request).ToLower();
+                    flag = FuncEnum.set_speed; // Make sure flag is set last to avoid race condition
                     break;
                 case "/print":
                 case "/error":
-                    flag = FuncEnum.print;
+                    funcCallArg = GetPostData(request);
+                    flag = FuncEnum.print; // Make sure flag is set last to avoid race condition
                     break;
                 default:
                     SendResponse(response, "404 Not Found", 404);
