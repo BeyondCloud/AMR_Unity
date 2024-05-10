@@ -51,7 +51,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     [Header("Movement")]
     public float spin_direction = 0;
     private float spin_speed = 100;
-    public bool StopOnCollision = false;
+    public bool stopOnCollision = false;
 
     public float groundDrag;
 
@@ -114,7 +114,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public bool grounded = false;
     private void OnCollisionEnter(Collision collision)
     {
-        if (StopOnCollision)
+        if (stopOnCollision)
         {
             Reset();
         }
@@ -174,6 +174,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         {
             StopCoroutine(routine);
         }
+        stopOnCollision = false;
         routines.Clear();
         agent.enabled = true;
         navigation.SetIdle();
@@ -188,11 +189,13 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void GoForward()
     {
         Reset();
+        stopOnCollision = true;
         verticalInput = 1;
     }
     public void GoBack()
     {
         Reset();
+        stopOnCollision = true;
         verticalInput = -1;
     }
     IEnumerator _Rotate(float angle)
@@ -217,7 +220,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     IEnumerator RotateAndGoHelper(float degree)
     {
         yield return new WaitForCompletion(_Rotate(degree));
-        verticalInput = 1;
+        GoForward();
     }
     private void RotateAndGo(float degree)
     {
