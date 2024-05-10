@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,7 +15,6 @@ public class Navigation : MonoBehaviour
         charge = 5
     }
     public PlacesEmum places;
-    private PlacesEmum oldPlaces;
     // Start is called before the first frame update
     public Transform kitchen;
     public Transform livingRoom;
@@ -33,52 +33,53 @@ public class Navigation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (oldPlaces != places)
+        // Agent is enabled when the place tag changed to non-idle
+        if (places == PlacesEmum.idle)
         {
-            if (!agent.enabled)
-                agent.enabled = true;
-            switch (places)
-            {
-                case PlacesEmum.idle:
-                    if (agent.enabled)
-                        agent.ResetPath();
-                    break;
-                case PlacesEmum.kitchen:
-                    agent.destination = kitchen.position;
-                    break;
-                case PlacesEmum.livingRoom:
-                    agent.destination = livingRoom.position;
-                    break;
-                case PlacesEmum.bathroom:
-                    agent.destination = bathroom.position;
-                    break;
-                case PlacesEmum.bedroom:
-                    agent.destination = bedroom.position;
-                    break;
-                case PlacesEmum.charge:
-                    agent.destination = charge.position;
-                    break;
-            }
-            oldPlaces = places;
+            if (agent.enabled)
+                agent.ResetPath();
+            agent.enabled = false;
+            return;
+        }
+        agent.enabled = true;
+        switch (places)
+        {
+            case PlacesEmum.kitchen:
+                agent.destination = kitchen.position;
+                break;
+            case PlacesEmum.livingRoom:
+                agent.destination = livingRoom.position;
+                break;
+            case PlacesEmum.bathroom:
+                agent.destination = bathroom.position;
+                break;
+            case PlacesEmum.bedroom:
+                agent.destination = bedroom.position;
+                break;
+            case PlacesEmum.charge:
+                agent.destination = charge.position;
+                break;
         }
         if (agent.enabled && !agent.pathPending)
         {
-            agent.speed = playerController.GetSpeedLevel();
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
-                    playerController.Reset();
+                    Debug.Log("Reached destination!");
+                    places = PlacesEmum.idle;
                 }
             }
         }
     }
+
     public void SetIdle()
     {
         places = PlacesEmum.idle;
     }
     public void SetTarget(string place)
     {
+        agent.enabled = true;
         Debug.Log("SetTarget: " + place);
         switch (place)
         {

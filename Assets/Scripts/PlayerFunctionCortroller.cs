@@ -168,14 +168,16 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Reset()
     {
+        // Debug.Log("Reset!");
         // dropDown.value = 0; // This will make idle unselectable
         // StopAllCoroutines(); // Don't do this, coroutines need to exit gracefully (ex: text fade out)
         foreach (var routine in routines)
         {
             StopCoroutine(routine);
+            // Debug.Log("KILL "+routine.GetHashCode());
         }
-        stopOnCollision = false;
         routines.Clear();
+        stopOnCollision = false;
         agent.enabled = true;
         navigation.SetIdle();
         agent.enabled = false;
@@ -206,7 +208,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
             transform.rotation = Quaternion.LookRotation(rotation);
             yield return null;
-        }
+        }        
     }
     IEnumerator RotateHelper(float degree)
     {
@@ -214,8 +216,12 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Rotate(float degree)
     {
+        // Debug.Log("A");
         Reset();
-        routines.Add(StartCoroutine(RotateHelper(degree)));
+        // Debug.Log("B");
+        var routine = StartCoroutine(RotateHelper(degree));
+        // Debug.Log("Create " + routine.GetHashCode());
+        routines.Add(routine);
     }
     IEnumerator RotateAndGoHelper(float degree)
     {
