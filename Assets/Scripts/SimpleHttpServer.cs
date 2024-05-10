@@ -157,7 +157,7 @@ public class SimpleHttpServer : MonoBehaviour
             returnJsonString = "{\"data\":null}";
             switch (request.Url.AbsolutePath)
             {
-                case "stop":
+                case "/stop":
                     flag = FuncEnum.stop;
                     break;
                 case "/go_forward":
