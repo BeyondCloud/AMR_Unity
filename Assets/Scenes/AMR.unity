@@ -2806,7 +2806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &782306740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4739,7 +4739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 1223174450}
-  speedLevel: 2
+  speedLevel: 3
   groundDrag: 6.9
   jumpForce: 2000
   jumpCooldown: 0.9

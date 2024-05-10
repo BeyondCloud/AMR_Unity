@@ -17,10 +17,10 @@ public class DropDown : MonoBehaviour
                 playerController.GoBack();
                 break;
             case 3:
-                playerController.SpinRight();
+                playerController.Rotate(180);
                 break;
             case 4:
-                playerController.SpinLeft();
+                playerController.Rotate(-180);
                 break;
             case 5:
                 playerController.Goto("kitchen");

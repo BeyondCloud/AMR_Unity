@@ -169,7 +169,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void Reset()
     {
         dropDown.value = 0;
-        StopAllCoroutines();
+        // StopAllCoroutines(); // Don't do this, coroutines need to exit gracefully (ex: text fade out)
         agent.enabled = true;
         navigation.SetIdle();
         agent.enabled = false;
