@@ -5,7 +5,7 @@ public class Follower : MonoBehaviour
     private Transform target;
     public bool isFollowing = false;
     public float nearDistance = 1.5f;
-    public float rotate_speed = 1.0f;
+    private float rotate_speed = 4.0f;
     private float follow_speed = 1.2f;
     private float distance;
     private GameObject dummyTarget;

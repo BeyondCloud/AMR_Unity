@@ -3,7 +3,7 @@ using UnityEngine;
 public class Cleaner : MonoBehaviour
 {
     public float power = 100f;
-    public float drainRate = 0.3f;
+    private float drainRate = 0.3f;
     public bool isCharging = false;
     private float charge_rate = 5f;
     private float max_power = 100f;
