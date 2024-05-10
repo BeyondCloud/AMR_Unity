@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\SpeedLevelToText.cs" />
     <Compile Include="Assets\Scripts\Trash\FollowPlayerCam.cs" />
     <Compile Include="Assets\Scripts\Navigation.cs" />
+    <Compile Include="Assets\LowPolyLight\Effect\Bloom.cs" />
     <Compile Include="Assets\Scripts\PlayerCam.cs" />
     <Compile Include="Assets\Scripts\DebugToText.cs" />
     <Compile Include="Assets\Scripts\FollowTargetCam.cs" />
@@ -95,6 +96,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\AurynSky\Gems Ultimate Pack\READ ME.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\LowPolyLight\Effect\Bloom.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
