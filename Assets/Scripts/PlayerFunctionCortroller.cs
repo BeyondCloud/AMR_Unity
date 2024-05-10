@@ -116,6 +116,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     {
         if (stopOnCollision)
         {
+            Debug.Log("Collision detected, stopping");
             Reset();
         }
     }
