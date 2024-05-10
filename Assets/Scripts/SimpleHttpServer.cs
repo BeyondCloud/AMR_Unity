@@ -6,6 +6,27 @@ using UnityEngine;
 
 public class SimpleHttpServer : MonoBehaviour
 {
+    public enum FuncEnum
+    {
+        idle = 0,
+        go_forward = 1,
+        go_back = 2,
+        go_right = 3,
+        go_left = 4,
+        go_crowded = 5,
+        _goto = 6,
+        spin_right = 7,
+        spin_left = 8,
+        follow = 9,
+        echo_seen_object = 10,
+        get_battery_percentage = 11,
+        get_speed = 12,
+        dance = 13,
+        find = 14,
+        set_speed = 15,
+        print = 16
+
+    }
     public PlayerFunctionCortroller controller;
     private HttpListener listener;
     private bool isRunning = false;
@@ -14,19 +35,83 @@ public class SimpleHttpServer : MonoBehaviour
 
     // This will work on Windows, you need to turn off the firewall (local network only)
     // curl -X POST http://<your_IPv4>:8000/goto -d "kitchen"
-    public string ip="192.168.0.225";
-    public string port="8000";
+    public string ip = "192.168.0.225";
+    public string port = "8000";
     void Start()
     {
         string url = $"http://{ip}:{port}/";
         StartServer(url);
     }
-
+    private FuncEnum flag = 0;
+    private string funcCallArg = "";
+    void Update()
+    {
+        if (flag == FuncEnum.idle)
+            return;
+        else
+        {
+            switch (flag)
+            {
+                case FuncEnum.go_forward:
+                    controller.GoForward();
+                    break;
+                case FuncEnum.go_back:
+                    controller.GoBack();
+                    break;
+                case FuncEnum.go_right:
+                    controller.GoRight();
+                    break;
+                case FuncEnum.go_left:
+                    controller.GoLeft();
+                    break;
+                case FuncEnum.go_crowded:
+                    controller.GoCrowded();
+                    break;
+                case FuncEnum._goto:
+                    controller.Goto(funcCallArg);
+                    break;
+                case FuncEnum.spin_right:
+                    controller.SpinRight();
+                    break;
+                case FuncEnum.spin_left:
+                    controller.SpinLeft();
+                    break;
+                case FuncEnum.follow:
+                    controller.Follow();
+                    break;
+                case FuncEnum.echo_seen_object:
+                    controller.EchoSeenObjects();
+                    break;
+                case FuncEnum.get_battery_percentage:
+                    controller.GetBatteryPercentage();
+                    break;
+                case FuncEnum.get_speed:
+                    controller.GetSpeedLevel();
+                    break;
+                case FuncEnum.dance:
+                    controller.Dance();
+                    break;
+                case FuncEnum.find:
+                    controller.Find(funcCallArg);
+                    break;
+                case FuncEnum.set_speed:
+                    controller.SetSpeedLevel(Int32.Parse(funcCallArg));
+                    break;
+                case FuncEnum.print:
+                    Debug.Log(funcCallArg);
+                    break;
+            }
+            flag = FuncEnum.idle;
+        }
+    }
     void OnApplicationQuit()
     {
         StopServer();
     }
-
+    public void Goto(string place)
+    {
+        controller.Goto(place);
+    }
     private void StartServer(string url = "http://localhost:8000/")
     {
         try
@@ -51,6 +136,7 @@ public class SimpleHttpServer : MonoBehaviour
 
     private void OnRequestReceived(IAsyncResult result)
     {
+        Debug.Log("Request received");
         if (!isRunning) return;
 
         HttpListenerContext context = listener.EndGetContext(result);
@@ -63,91 +149,71 @@ public class SimpleHttpServer : MonoBehaviour
             switch (request.Url.AbsolutePath)
             {
                 case "/go_forward":
-                    controller.GoForward();
+                    flag = FuncEnum.go_forward;
                     break;
                 case "/go_back":
-                    controller.GoBack();
+                    flag = FuncEnum.go_back;
                     break;
                 case "/go_right":
-                    controller.GoRight();
+                    flag = FuncEnum.go_right;
                     break;
                 case "/go_left":
-                    controller.GoLeft();
+                    flag = FuncEnum.go_left;
                     break;
                 case "/go_crowded":
-                    controller.GoCrowded();
+                    flag = FuncEnum.go_crowded;
                     break;
                 case "/go_charge":
-                    controller.Goto("charge");
+                    flag = FuncEnum._goto;
+                    funcCallArg = "charge_station";
                     break;
                 case "/spin_right":
-                    controller.SpinRight();
+                    flag = FuncEnum.spin_right;
                     break;
                 case "/spin_left":
-                    controller.SpinLeft();
+                    flag = FuncEnum.spin_left;
                     break;
                 case "/follow":
+                    flag = FuncEnum.follow;
                     controller.Follow();
                     break;
                 case "/echo_seen_object":
-                    controller.EchoSeenObjects();
+                    flag = FuncEnum.echo_seen_object;
                     break;
                 case "/get_battery_percentage":
-                    controller.GetBatteryPercentage();
+                    flag = FuncEnum.get_battery_percentage;
                     break;
                 case "/get_speed":
-                    controller.GetSpeedLevel();
+                    flag = FuncEnum.get_speed;
                     break;
                 case "/dance":
-                    controller.Dance();
+                    flag = FuncEnum.dance;
                     break;
                 case "/find":
-                    Find(request, response);
+                    flag = FuncEnum.find;
+                    funcCallArg = GetPostData(request).ToLower();
                     break;
                 case "/goto":
-                    Goto(request, response);
+                    flag = FuncEnum._goto;
+                    funcCallArg = GetPostData(request).ToLower();
                     break;
                 case "/set_speed":
-                    SetSpeed(request, response);
+                    flag = FuncEnum.set_speed;
+                    funcCallArg = GetPostData(request).ToLower();
                     break;
                 case "/print":
                 case "/error":
-                    Debug.Log(GetPostData(request));
+                    flag = FuncEnum.print;
                     break;
                 default:
                     SendResponse(response, "404 Not Found", 404);
                     break;
             }
         }
-        else
-        {
-            SendResponse(response, " Only POST /goto is supported.</BODY></HTML>", 200);
-        }
-
+        string responseString = $"{request.Url.AbsolutePath}: {funcCallArg}";
+        SendResponse(response, responseString, 200);
         // Continue listening for incoming requests
         Listen();
-    }
-
-    private void Goto(HttpListenerRequest request, HttpListenerResponse response)
-    {
-        string place = GetPostData(request).ToLower();
-        controller.Goto(place);
-        string responseString = $"/goto: {place}";
-        SendResponse(response, responseString, 200);
-    }
-    private void Find(HttpListenerRequest request, HttpListenerResponse response)
-    {
-        string obj = GetPostData(request).ToLower();
-        controller.Find(obj);
-        string responseString = $"/find: {obj}";
-        SendResponse(response, responseString, 200);
-    }
-    private void SetSpeed(HttpListenerRequest request, HttpListenerResponse response)
-    {
-        int speedLevel = Int32.Parse(GetPostData(request));
-        controller.SetSpeedLevel(speedLevel);
-        string responseString = $"/setSpeedLevel: {speedLevel}";
-        SendResponse(response, responseString, 200);
     }
     string GetPostData(HttpListenerRequest request)
     {

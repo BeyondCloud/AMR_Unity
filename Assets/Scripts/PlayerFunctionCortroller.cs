@@ -40,16 +40,16 @@ public class PlayerFunctionCortroller : MonoBehaviour
     //     go_back =2,
     //     go_right =3,
     //     go_left =4,
-    //     go_crowded =5,   
+    //     go_crowded =5,
     //     go_charge =6,
     //     spin_right =7,
     //     spin_left =8,
-    //     follow =9,    
-    //     echo_seen_object =10,   
+    //     follow =9,
+    //     echo_seen_object =10,
     //     get_battery_percentage =12,
     //     get_speed =14,
     //     dance =13,
-    //     find =11, 
+    //     find =11,
 
 
     // OTHERS
@@ -185,7 +185,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         spin_direction = 0;
         follower.Reset();
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-        
+
     }
     public void TaskComplete()
     {
@@ -314,7 +314,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
             var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
             transform.rotation = Quaternion.LookRotation(rotation);
             yield return null;
-        } 
+        }
     }
     IEnumerator find_surrounding(string target)
     {
@@ -351,7 +351,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         // find most crowded area
         if (objectsInMaxAngle.Count == 0)
         {
-            Debug.Log("No "+target+" in sight");
+            Debug.Log("No " + target + " in sight");
             yield break;
         }
         Vector3 centroid = new Vector3(0, 0, 0);

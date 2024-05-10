@@ -6,12 +6,12 @@ public class Navigation : MonoBehaviour
 {
     public enum PlacesEmum
     {
-        idle =0,
-        kitchen=1,
-        livingRoom=2,
-        bathroom=3,
-        bedroom=4,
-        charge=5
+        idle = 0,
+        kitchen = 1,
+        livingRoom = 2,
+        bathroom = 3,
+        bedroom = 4,
+        charge = 5
     }
     public PlacesEmum places;
     private PlacesEmum oldPlaces;
@@ -78,13 +78,13 @@ public class Navigation : MonoBehaviour
     }
     public void SetTarget(string place)
     {
-        Debug.Log("SetTarget:"+place);
-        switch(place)
+        Debug.Log("SetTarget:" + place);
+        switch (place)
         {
             case "kitchen":
                 places = PlacesEmum.kitchen;
                 break;
-            case "livingRoom":
+            case "living_room":
                 places = PlacesEmum.livingRoom;
                 break;
             case "bathroom":
@@ -93,11 +93,11 @@ public class Navigation : MonoBehaviour
             case "bedroom":
                 places = PlacesEmum.bedroom;
                 break;
-            case "charge":
+            case "charge_station":
                 places = PlacesEmum.charge;
                 break;
             default:
-                Debug.Log("Invalid place:"+place);
+                Debug.Log($"Place {place} is not one of kitchen, living_room, bathroom, bedroom or charge_station");
                 break;
         }
     }

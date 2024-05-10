@@ -26,7 +26,7 @@ public class DropDown : MonoBehaviour
                 playerController.Goto("kitchen");
                 break;
             case 6:
-                playerController.Goto("charge");
+                playerController.Goto("charge_station");
                 break;
             case 7:
                 playerController.EchoSeenObjects();
