@@ -200,21 +200,43 @@ public class PlayerFunctionCortroller : MonoBehaviour
         Reset();
         verticalInput = -1;
     }
-    IEnumerator Rotate(float degree)
+    IEnumerator _Rotate(float angle)
+    {
+        Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
+        while (Vector3.Angle(transform.forward, rotate_to) > 1)
+        {
+            var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
+            transform.rotation = Quaternion.LookRotation(rotation);
+            yield return null;
+        }
+    }
+    IEnumerator RotateHelper(float degree)
     {
         yield return new WaitForCompletion(_Rotate(degree));
     }
+    public void Rotate(float degree)
+    {
+        StartCoroutine(RotateHelper(degree));
+    }
+    IEnumerator RotateAndGoHelper(float degree)
+    {
+        yield return new WaitForCompletion(_Rotate(degree));
+        verticalInput = 1;
+    }
+    public void RotateAndGo(float degree)
+    {
+        StartCoroutine(RotateAndGoHelper(degree));
+    }
+    
     public void GoRight()
     {
         Reset();
-        StartCoroutine(Rotate(90));
-        verticalInput = 1;
+        RotateAndGo(90);
     }
     public void GoLeft()
     {
         Reset();
-        StartCoroutine(Rotate(-90));
-        verticalInput = 1;
+        RotateAndGo(-90);
     }
 
     public void SpinRight()
@@ -305,16 +327,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         Reset();
         Find("person");
     }
-    IEnumerator _Rotate(float angle)
-    {
-        Vector3 rotate_to = Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
-        while (Vector3.Angle(transform.forward, rotate_to) > 1)
-        {
-            var rotation = Vector3.RotateTowards(transform.forward, rotate_to, Time.deltaTime, 0.0f);
-            transform.rotation = Quaternion.LookRotation(rotation);
-            yield return null;
-        }
-    }
+
     IEnumerator find_surrounding(string target)
     {
         List<ScanMeta> scanMetas = new List<ScanMeta>();

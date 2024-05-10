@@ -77,10 +77,10 @@ public class SimpleHttpServer : MonoBehaviour
                     controller.Goto(funcCallArg);
                     break;
                 case FuncEnum.spin_right:
-                    controller.SpinRight();
+                    controller.Rotate(180);
                     break;
                 case FuncEnum.spin_left:
-                    controller.SpinLeft();
+                    controller.Rotate(-180);
                     break;
                 case FuncEnum.follow:
                     controller.Follow();

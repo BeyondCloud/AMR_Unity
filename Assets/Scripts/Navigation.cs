@@ -78,7 +78,7 @@ public class Navigation : MonoBehaviour
     }
     public void SetTarget(string place)
     {
-        Debug.Log("SetTarget:" + place);
+        Debug.Log("SetTarget: " + place);
         switch (place)
         {
             case "kitchen":
