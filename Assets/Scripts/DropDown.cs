@@ -55,6 +55,9 @@ public class DropDown : MonoBehaviour
             case 15:
                 playerController.Find("book");
                 break;
+            case 16:
+                playerController.SetSpeedLevel(3);
+                break;
         }
     }
 }

@@ -19,7 +19,7 @@ public class SimpleHttpServer : MonoBehaviour
         spin_right = 8,
         spin_left = 9,
         follow = 10,
-        echo_seen_object = 11,
+        echo_seen_objects = 11,
         get_battery_percentage = 12,
         get_speed = 13,
         dance = 14,
@@ -85,15 +85,14 @@ public class SimpleHttpServer : MonoBehaviour
                 case FuncEnum.follow:
                     controller.Follow();
                     break;
-                case FuncEnum.echo_seen_object:
+                case FuncEnum.echo_seen_objects:
                     controller.EchoSeenObjects();
                     break;
-                case FuncEnum.get_battery_percentage:
+                case FuncEnum.get_speed:
                     string_holder = controller.GetSpeedLevel().ToString();
                     returnJsonString = "{\"data\":" + string_holder + "}";
-                    controller.GetBatteryPercentage();
                     break;
-                case FuncEnum.get_speed:
+                case FuncEnum.get_battery_percentage:
                     string_holder = controller.GetBatteryPercentage().ToString();
                     returnJsonString = "{\"data\":" + string_holder + "}";
                     break;
@@ -104,7 +103,7 @@ public class SimpleHttpServer : MonoBehaviour
                     controller.Find(funcCallArg);
                     break;
                 case FuncEnum.set_speed:
-                    controller.SetSpeedLevel(Int32.Parse(funcCallArg));
+                    controller.SetSpeedLevel(int.Parse(funcCallArg));
                     break;
                 case FuncEnum.print:
                     Debug.Log(funcCallArg);
@@ -188,8 +187,8 @@ public class SimpleHttpServer : MonoBehaviour
                 case "/follow":
                     flag = FuncEnum.follow;
                     break;
-                case "/echo_seen_object":
-                    flag = FuncEnum.echo_seen_object;
+                case "/echo_seen_objects":
+                    flag = FuncEnum.echo_seen_objects;
                     break;
                 case "/get_battery_percentage":
                     flag = FuncEnum.get_battery_percentage;
@@ -234,7 +233,6 @@ public class SimpleHttpServer : MonoBehaviour
         using (StreamReader reader = new StreamReader(request.InputStream, request.ContentEncoding))
         {
             string postData = reader.ReadToEnd();
-            Debug.Log($"Received POST data at /goto: {postData}");
             return postData;
         }
     }

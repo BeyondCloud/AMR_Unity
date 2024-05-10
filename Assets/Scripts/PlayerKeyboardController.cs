@@ -8,7 +8,8 @@ public class PlayerKeyboardController : MonoBehaviour
     [Header("Movement")]
     public int speedLevel=2;
     private int maxSpeedLevel = 5;
-    private int baseSpeed = 200;
+    private int speedUnit = 30;
+    private int baseSpeed = 300;
     private float moveSpeed;
 
     public float groundDrag;
@@ -173,10 +174,10 @@ public class PlayerKeyboardController : MonoBehaviour
     {
         readyToJump = true;
     }
-    private void SetSpeed(int speedLevel)
+    public void SetSpeed(int speedLevel)
     {
-        speedLevel = Mathf.Clamp(speedLevel, 1, maxSpeedLevel);
-        moveSpeed = baseSpeed * speedLevel;
+        this.speedLevel = Mathf.Clamp(speedLevel, 1, maxSpeedLevel);
+        moveSpeed = baseSpeed + speedUnit*speedLevel;
     }
     
 }

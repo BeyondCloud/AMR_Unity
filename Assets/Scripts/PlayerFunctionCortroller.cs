@@ -45,7 +45,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     //     spin_right =7,
     //     spin_left =8,
     //     follow =9,
-    //     echo_seen_object =10,
+    //     echo_seen_objects =10,
     //     get_battery_percentage =12,
     //     get_speed =14,
     //     dance =13,
@@ -380,13 +380,12 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void SetSpeedLevel(int speedLevel)
     {
-        Debug.Log("Current Speed Level: " + speedLevel);
-        playerController.speedLevel = speedLevel;
+        playerController.SetSpeed(speedLevel);
+        Debug.Log("Set Speed Level: " + playerController.speedLevel);
     }
     public int GetSpeedLevel()
     {
         var speed_level = playerController.speedLevel;
-        Debug.Log("Current Speed level: " + speed_level);
         return speed_level;
     }
     IEnumerator dance_routine()

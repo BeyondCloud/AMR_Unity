@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\NpcPatrol.cs" />
     <Compile Include="Assets\Scripts\ChargeStation.cs" />
+    <Compile Include="Assets\Scripts\SpeedLevelToText.cs" />
     <Compile Include="Assets\Scripts\Trash\FollowPlayerCam.cs" />
     <Compile Include="Assets\Scripts\Navigation.cs" />
     <Compile Include="Assets\Scripts\PlayerCam.cs" />
