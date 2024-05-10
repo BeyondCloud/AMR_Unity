@@ -21,16 +21,6 @@ public class WaitForCompletion : CustomYieldInstruction
         get { return coroutine.MoveNext(); }
     }
 }
-public class ScanMeta
-{
-    public float angle;
-    public Dictionary<string, List<Vector3>> objects;
-    public ScanMeta(float angle, Dictionary<string, List<Vector3>> objects)
-    {
-        this.angle = angle;
-        this.objects = objects;
-    }
-}
 public class PlayerFunctionCortroller : MonoBehaviour
 {
     // public enum Cmd
@@ -330,7 +320,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
 
     IEnumerator find_surrounding(string target)
     {
-        List<ScanMeta> scanMetas = new List<ScanMeta>();
         int split = 4;
         // get surrounding objects
         if (split < 1)

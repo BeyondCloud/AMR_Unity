@@ -6,7 +6,7 @@ public class PlayerKeyboardController : MonoBehaviour
 {
     public PlayerFunctionCortroller playerController;
     [Header("Movement")]
-    public int speedLevel=2;
+    public int speedLevel=3;
     private int maxSpeedLevel = 5;
     private int speedUnit = 30;
     private int baseSpeed = 300;
