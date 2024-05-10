@@ -11,10 +11,11 @@ public class DebugToText : MonoBehaviour
     void Awake()
     {
         Application.logMessageReceived += LogCallback;
+        mText = gameObject.GetComponent<TextMeshProUGUI>();
     }
+    
     void Start()
     {
-        mText = gameObject.GetComponent<TextMeshProUGUI>();
     }
 
     void OnDestroy()
