@@ -44,6 +44,7 @@ public class SimpleHttpServer : MonoBehaviour
     }
     private FuncEnum flag = 0;
     private string funcCallArg = "";
+    private string returnJsonString = "{\"data\":null}";
     void Update()
     {
         if (flag == FuncEnum.idle)
@@ -86,7 +87,8 @@ public class SimpleHttpServer : MonoBehaviour
                     controller.GetBatteryPercentage();
                     break;
                 case FuncEnum.get_speed:
-                    controller.GetSpeedLevel();
+                    var tmp = controller.GetSpeedLevel().ToString();
+                    returnJsonString = "{\"data\":" + tmp + "}}";
                     break;
                 case FuncEnum.dance:
                     controller.Dance();
@@ -146,6 +148,7 @@ public class SimpleHttpServer : MonoBehaviour
         // Determine action based on the URL and method
         if (request.HttpMethod == "POST")
         {
+            returnJsonString = "{\"data\":null}";
             switch (request.Url.AbsolutePath)
             {
                 case "/go_forward":
@@ -210,8 +213,9 @@ public class SimpleHttpServer : MonoBehaviour
                     break;
             }
         }
-        string responseString = $"{request.Url.AbsolutePath}: {funcCallArg}";
-        SendResponse(response, responseString, 200);
+        while (flag != FuncEnum.idle) {}
+        SendResponse(response, returnJsonString, 200);
+
         // Continue listening for incoming requests
         Listen();
     }
