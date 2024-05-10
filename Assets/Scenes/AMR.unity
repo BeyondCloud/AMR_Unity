@@ -4802,7 +4802,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1223174440}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.85
+  m_Radius: 1.01
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -4828,7 +4828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spin_direction: 0
-  StopOnCollision: 1
+  StopOnCollision: 0
   groundDrag: 7
   airMultiplier: 0.03
   walkSpeed: 0
@@ -5485,7 +5485,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.123333335
+  m_VoxelSize: 0.2
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 6bdff20b7e77faa4db7cfd90420b5e65, type: 2}
   m_BuildHeightMesh: 0

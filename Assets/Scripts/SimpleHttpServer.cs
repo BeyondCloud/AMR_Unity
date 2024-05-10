@@ -9,22 +9,23 @@ public class SimpleHttpServer : MonoBehaviour
     public enum FuncEnum
     {
         idle = 0,
-        go_forward = 1,
-        go_back = 2,
-        go_right = 3,
-        go_left = 4,
-        go_crowded = 5,
-        _goto = 6,
-        spin_right = 7,
-        spin_left = 8,
-        follow = 9,
-        echo_seen_object = 10,
-        get_battery_percentage = 11,
-        get_speed = 12,
-        dance = 13,
-        find = 14,
-        set_speed = 15,
-        print = 16
+        stop = 1,
+        go_forward = 2,
+        go_back = 3,
+        go_right = 4,
+        go_left = 5,
+        go_crowded = 6,
+        _goto = 7,
+        spin_right = 8,
+        spin_left = 9,
+        follow = 10,
+        echo_seen_object = 11,
+        get_battery_percentage = 12,
+        get_speed = 13,
+        dance = 14,
+        find = 15,
+        set_speed = 16,
+        print = 17
 
     }
     public PlayerFunctionCortroller controller;
@@ -51,8 +52,12 @@ public class SimpleHttpServer : MonoBehaviour
             return;
         else
         {
+            string string_holder = "";
             switch (flag)
             {
+                case FuncEnum.stop:
+                    controller.Reset();
+                    break;
                 case FuncEnum.go_forward:
                     controller.GoForward();
                     break;
@@ -84,11 +89,13 @@ public class SimpleHttpServer : MonoBehaviour
                     controller.EchoSeenObjects();
                     break;
                 case FuncEnum.get_battery_percentage:
+                    string_holder = controller.GetSpeedLevel().ToString();
+                    returnJsonString = "{\"data\":" + string_holder + "}";
                     controller.GetBatteryPercentage();
                     break;
                 case FuncEnum.get_speed:
-                    var tmp = controller.GetSpeedLevel().ToString();
-                    returnJsonString = "{\"data\":" + tmp + "}}";
+                    string_holder = controller.GetBatteryPercentage().ToString();
+                    returnJsonString = "{\"data\":" + string_holder + "}";
                     break;
                 case FuncEnum.dance:
                     controller.Dance();
@@ -151,6 +158,9 @@ public class SimpleHttpServer : MonoBehaviour
             returnJsonString = "{\"data\":null}";
             switch (request.Url.AbsolutePath)
             {
+                case "stop":
+                    flag = FuncEnum.stop;
+                    break;
                 case "/go_forward":
                     flag = FuncEnum.go_forward;
                     break;
@@ -178,16 +188,17 @@ public class SimpleHttpServer : MonoBehaviour
                     break;
                 case "/follow":
                     flag = FuncEnum.follow;
-                    controller.Follow();
                     break;
                 case "/echo_seen_object":
                     flag = FuncEnum.echo_seen_object;
                     break;
                 case "/get_battery_percentage":
                     flag = FuncEnum.get_battery_percentage;
+                    while (flag != FuncEnum.idle) {}
                     break;
                 case "/get_speed":
                     flag = FuncEnum.get_speed;
+                    while (flag != FuncEnum.idle) {}
                     break;
                 case "/dance":
                     flag = FuncEnum.dance;
@@ -213,7 +224,6 @@ public class SimpleHttpServer : MonoBehaviour
                     break;
             }
         }
-        while (flag != FuncEnum.idle) {}
         SendResponse(response, returnJsonString, 200);
 
         // Continue listening for incoming requests
