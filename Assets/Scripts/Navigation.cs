@@ -63,6 +63,7 @@ public class Navigation : MonoBehaviour
         }
         if (agent.enabled && !agent.pathPending)
         {
+            agent.speed = playerController.GetSpeedLevel();
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)

@@ -56,7 +56,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public float groundDrag;
 
     public float airMultiplier;
-
+    private List<Coroutine> routines = new List<Coroutine>();
 
     [HideInInspector] public float walkSpeed;
     [HideInInspector] public float sprintSpeed;
@@ -168,8 +168,13 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Reset()
     {
-        dropDown.value = 0;
+        // dropDown.value = 0; // This will make idle unselectable
         // StopAllCoroutines(); // Don't do this, coroutines need to exit gracefully (ex: text fade out)
+        foreach (var routine in routines)
+        {
+            StopCoroutine(routine);
+        }
+        routines.Clear();
         agent.enabled = true;
         navigation.SetIdle();
         agent.enabled = false;
@@ -206,16 +211,17 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Rotate(float degree)
     {
-        StartCoroutine(RotateHelper(degree));
+        Reset();
+        routines.Add(StartCoroutine(RotateHelper(degree)));
     }
     IEnumerator RotateAndGoHelper(float degree)
     {
         yield return new WaitForCompletion(_Rotate(degree));
         verticalInput = 1;
     }
-    public void RotateAndGo(float degree)
+    private void RotateAndGo(float degree)
     {
-        StartCoroutine(RotateAndGoHelper(degree));
+        routines.Add(StartCoroutine(RotateAndGoHelper(degree)));
     }
     
     public void GoRight()
@@ -372,7 +378,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void GoCrowded()
     {
         Reset();
-        StartCoroutine(find_surrounding("person"));
+        routines.Add(StartCoroutine(find_surrounding("person")));
     }
     public int GetBatteryPercentage()
     {
@@ -402,7 +408,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void Dance()
     {
         Reset();
-        StartCoroutine(dance_routine());
+        routines.Add(StartCoroutine(dance_routine()));
     }
 
 }
