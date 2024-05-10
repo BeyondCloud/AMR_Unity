@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Follower : MonoBehaviour
 {
     private Transform target;
     public bool isFollowing = false;
     public float nearDistance = 1.5f;
-    private float rotate_speed = 4.0f;
+    private float rotate_speed = 1.0f;
     private float follow_speed = 1.2f;
     private float distance;
     private GameObject dummyTarget;
@@ -28,6 +29,11 @@ public class Follower : MonoBehaviour
             Vector3 modified_position = target.position;
             modified_position.y = transform.position.y;
             Vector3 targetDirection = modified_position - transform.position;
+            
+            if (distance < 2.0f)
+            {
+                rotate_speed = 4.0f;
+            }
             Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, rotate_speed * Time.deltaTime, 0.0f);
 
             // Draw a ray pointing at our target in
