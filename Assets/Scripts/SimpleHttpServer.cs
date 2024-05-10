@@ -149,7 +149,7 @@ public class SimpleHttpServer : MonoBehaviour
         HttpListenerContext context = listener.EndGetContext(result);
         HttpListenerRequest request = context.Request;
         HttpListenerResponse response = context.Response;
-
+        int returnCode = 200;
         // Determine action based on the URL and method
         if (request.HttpMethod == "POST")
         {
@@ -219,11 +219,12 @@ public class SimpleHttpServer : MonoBehaviour
                     flag = FuncEnum.print; // Make sure flag is set last to avoid race condition
                     break;
                 default:
-                    SendResponse(response, "404 Not Found", 404);
+                    returnJsonString = "{\"error\":\"404 Not Found\"}";
+                    returnCode = 404;
                     break;
             }
         }
-        SendResponse(response, returnJsonString, 200);
+        SendResponse(response, returnJsonString, returnCode);
 
         // Continue listening for incoming requests
         Listen();
