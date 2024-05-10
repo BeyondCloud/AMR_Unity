@@ -20,7 +20,7 @@ public class SimpleHttpServer : MonoBehaviour
         spin_left = 9,
         follow = 10,
         echo_seen_objects = 11,
-        get_battery_percentage = 12,
+        get_power = 12,
         get_speed = 13,
         dance = 14,
         find = 15,
@@ -92,7 +92,7 @@ public class SimpleHttpServer : MonoBehaviour
                     string_holder = controller.GetSpeedLevel().ToString();
                     returnJsonString = "{\"data\":" + string_holder + "}";
                     break;
-                case FuncEnum.get_battery_percentage:
+                case FuncEnum.get_power:
                     string_holder = controller.GetBatteryPercentage().ToString();
                     returnJsonString = "{\"data\":" + string_holder + "}";
                     break;
@@ -190,8 +190,8 @@ public class SimpleHttpServer : MonoBehaviour
                 case "/echo_seen_objects":
                     flag = FuncEnum.echo_seen_objects;
                     break;
-                case "/get_battery_percentage":
-                    flag = FuncEnum.get_battery_percentage;
+                case "/get_power":
+                    flag = FuncEnum.get_power;
                     while (flag != FuncEnum.idle) {}
                     break;
                 case "/get_speed":
