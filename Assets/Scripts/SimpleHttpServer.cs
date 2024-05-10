@@ -145,7 +145,6 @@ public class SimpleHttpServer : MonoBehaviour
 
     private void OnRequestReceived(IAsyncResult result)
     {
-        Debug.Log("Request received");
         if (!isRunning) return;
 
         HttpListenerContext context = listener.EndGetContext(result);
