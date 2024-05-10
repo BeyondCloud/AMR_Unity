@@ -125,7 +125,9 @@ public class PlayerFunctionCortroller : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (StopOnCollision)
-            TaskComplete();
+        {
+            Reset();
+        }
     }
     private void OnCollisionStay(Collision collision)
     {
@@ -176,6 +178,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Reset()
     {
+        dropDown.value = 0;
         StopAllCoroutines();
         agent.enabled = true;
         navigation.SetIdle();
@@ -186,10 +189,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
         follower.Reset();
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
 
-    }
-    public void TaskComplete()
-    {
-        dropDown.value = 0;
     }
     public void GoForward()
     {
@@ -366,8 +365,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         {
             yield return null;
         }
-        follower.Reset();
-        TaskComplete();
+        Reset();
     }
     public void GoCrowded()
     {
