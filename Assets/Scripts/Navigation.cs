@@ -60,18 +60,23 @@ public class Navigation : MonoBehaviour
                 agent.destination = charge.position;
                 break;
         }
-        if (agent.enabled && !agent.pathPending)
+        if (Vector3.Distance(agent.destination, transform.position) <  agent.stoppingDistance+0.1)
         {
-            if (agent.remainingDistance <= agent.stoppingDistance)
-            {
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-                {
-                    Debug.Log("Reached destination!");
-                    playerController.Reset();
-                    // places = PlacesEmum.idle;
-                }
-            }
+            Debug.Log("Reached destination!");
+            playerController.Reset();
         }
+
+        // if (agent.enabled && !agent.pathPending)
+        // {
+        //     if (agent.remainingDistance <= agent.stoppingDistance)
+        //     {
+        //         // if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+        //         // {
+                
+        //             // places = PlacesEmum.idle;
+        //         // }
+        //     }
+        // }
     }
 
     public void SetIdle()

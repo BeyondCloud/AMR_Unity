@@ -139,6 +139,8 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.CompareTag("Ground"))
+             return;
         if (stopOnCollision)
         {
             Debug.Log("Collision detected, stopping");
@@ -150,6 +152,13 @@ public class PlayerFunctionCortroller : MonoBehaviour
         if (grounded == false)
         {
             grounded = true;
+        }
+        if (collision.gameObject.CompareTag("Ground"))
+             return;
+        if (stopOnCollision)
+        {
+            Debug.Log("Collision detected, stopping");
+            Reset();
         }
     }
 
