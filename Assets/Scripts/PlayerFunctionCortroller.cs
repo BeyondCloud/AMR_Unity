@@ -141,7 +141,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
              return;
         if (stopOnCollision)
         {
-            Debug.Log("Collision detected, stopping");
+            Debug.Log("Hit something, stopped");
             Reset();
         }
     }
@@ -155,7 +155,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
              return;
         if (stopOnCollision)
         {
-            Debug.Log("Collision detected, stopping");
+            Debug.Log("Hit something, stopped");
             Reset();
         }
     }
