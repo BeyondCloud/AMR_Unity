@@ -3,7 +3,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 
-public class SpeedLevelToText : MonoBehaviour
+public class DisplaySettings : MonoBehaviour
 {
     private TextMeshProUGUI mText; 
     public PlayerFunctionCortroller playerFunctionCortroller;

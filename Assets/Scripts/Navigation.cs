@@ -102,6 +102,7 @@ public class Navigation : MonoBehaviour
                 break;
             default:
                 Debug.Log($"Place {place} is not one of kitchen, living_room, bathroom, bedroom or charge_station");
+                playerController.Reset();
                 break;
         }
     }

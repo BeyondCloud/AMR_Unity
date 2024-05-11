@@ -28,9 +28,9 @@ public class DebugToText : MonoBehaviour
         mText.text = message;
         if (fadeRoutine != null)
             StopCoroutine(fadeRoutine);
-        fadeRoutine = StartCoroutine(IntroFade(mText));
+        fadeRoutine = StartCoroutine(IntroFade());
     }
-    private IEnumerator IntroFade (TextMeshProUGUI textToUse) {
+    private IEnumerator IntroFade () {
         yield return StartCoroutine(FadeTextToFullAlpha(fadeDuration, mText));
         yield return new WaitForSeconds(2f);
         yield return StartCoroutine(FadeTextToZeroAlpha(fadeDuration, mText));
