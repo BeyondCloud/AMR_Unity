@@ -80,7 +80,7 @@ public class Navigation : MonoBehaviour
     {
         places = PlacesEmum.idle;
     }
-    public void SetTarget(string place, bool stopOnReach=false)
+    public void SetTarget(string place, bool stopOnReach=true)
     {
         agent.enabled = true;
         this.stopOnReach = stopOnReach;
@@ -109,7 +109,7 @@ public class Navigation : MonoBehaviour
                 break;
         }
     }
-    public void SetTarget(Transform place, bool stopOnReach=false)
+    public void SetTarget(Transform place, bool stopOnReach=true)
     {
         agent.enabled = true;
         this.stopOnReach = stopOnReach;
@@ -117,7 +117,7 @@ public class Navigation : MonoBehaviour
         FollowMe = place;
 
     }
-    public void SetTarget(Vector3 place, bool stopOnReach=false)
+    public void SetTarget(Vector3 place, bool stopOnReach=true)
     {
         agent.enabled = true;
         this.stopOnReach = stopOnReach;

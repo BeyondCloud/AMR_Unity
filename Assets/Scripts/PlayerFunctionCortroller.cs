@@ -349,7 +349,8 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         return -1;
     }
-    public void Find(string target_name, bool stopOnCollision = true)
+    public void Find(string target_name, 
+                     bool stopOnCollision = true, bool stopOnReach = true)
     {
         Reset();
         busyFlag = true;
@@ -358,7 +359,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         if (id != -1)
         {
             Debug.Log("Found " + target_name + " in sight!");
-            navigation.SetTarget(fov.targetsInView[id].transform);
+            navigation.SetTarget(fov.targetsInView[id].transform, stopOnReach);
         }
         else
         {
@@ -370,7 +371,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     {
         Reset();
         busyFlag = true;
-        Find("person",stopOnCollision=false);
+        Find("person", false, false);
     }
 
     IEnumerator find_surrounding(string target)
