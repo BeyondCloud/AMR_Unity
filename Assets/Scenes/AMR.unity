@@ -5825,7 +5825,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1223174440}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1
+  m_Radius: 0.9
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -5850,6 +5850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08663ba143e26f7439a0581ddf157dc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  busyFlag: 0
   spin_direction: 0
   stopOnCollision: 0
   groundDrag: 7
@@ -5857,9 +5858,6 @@ MonoBehaviour:
   walkSpeed: 0
   sprintSpeed: 0
   playerHeight: 2
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 1024
   orientation: {fileID: 1531676991}
   dropDown: {fileID: 1020326972}
   grounded: 0
@@ -7771,13 +7769,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1528516373}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.33402887, y: -0, z: -0, w: 0.94256294}
+  m_LocalRotation: {x: 0.0711841, y: 0, z: 0, w: 0.9974632}
   m_LocalPosition: {x: 0, y: 9.1, z: -3.5549998}
   m_LocalScale: {x: 1, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1223174445}
-  m_LocalEulerAnglesHint: {x: -39.027, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 8.164, y: 0, z: 0}
 --- !u!114 &1528516379
 MonoBehaviour:
   m_ObjectHideFlags: 0

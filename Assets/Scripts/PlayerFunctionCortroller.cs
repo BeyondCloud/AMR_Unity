@@ -47,7 +47,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     //     error=18
     //     print=17,
     // }
-    private const int timeOut = 5; // if negative, no timeout
+    private int timeOut = 10; // if negative, no timeout
     private DateTime lastCommandTime = DateTime.Now; 
     [Header("Movement")]
     public bool busyFlag = false;
@@ -95,18 +95,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         cleaner = GetComponent<Cleaner>();
         InvokeRepeating("TimeOutCheck", 0, 1.0f);
     }
-    void TimeOutCheck()
-    {
-        if (IsBusy() && timeOut > 0)
-        {
-            TimeSpan diff = DateTime.Now - lastCommandTime;
-            if (diff.TotalSeconds > timeOut)
-            {
-                Debug.Log("Timeout");
-                Reset();
-            }
-        }
-    }
+
     private void Update()
     {
         SpeedControl();
@@ -123,7 +112,25 @@ public class PlayerFunctionCortroller : MonoBehaviour
         MovePlayer();
         SpinPlayer();
     }
-
+    public void SetTimeout(int timeout)
+    {
+        Debug.Log("Set timeout to " + timeout);
+        timeOut = timeout;
+    }
+    void TimeOutCheck()
+    {
+        if (timeOut < 0)
+            return;
+        if (IsBusy())
+        {
+            TimeSpan diff = DateTime.Now - lastCommandTime;
+            if (diff.TotalSeconds > timeOut)
+            {
+                Debug.Log("Timeout");
+                Reset();
+            }
+        }
+    }
 
     public bool IsBusy()
     {
@@ -334,11 +341,11 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         return -1;
     }
-    public void Find(string target_name)
+    public void Find(string target_name, bool stopOnCollision = true)
     {
         Reset();
         busyFlag = true;
-        stopOnCollision = true;
+        this.stopOnCollision = stopOnCollision;
         int id = getFovNearestObjID(target_name);
         if (id != -1)
         {
@@ -353,7 +360,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     {
         Reset();
         busyFlag = true;
-        Find("person");
+        Find("person",stopOnCollision=false);
     }
 
     IEnumerator find_surrounding(string target)
