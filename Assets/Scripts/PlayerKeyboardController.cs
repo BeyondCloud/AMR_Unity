@@ -27,7 +27,6 @@ public class PlayerKeyboardController : MonoBehaviour
 
     [Header("Ground Check")]
     public float playerHeight;
-    public LayerMask whatIsGround;
     // bool grounded;
 
     public Transform thirdPersonCam;
@@ -49,9 +48,6 @@ public class PlayerKeyboardController : MonoBehaviour
 
     private void Update()
     {
-        // ground check
-        // grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
-        
         MyInput();
         SpeedControl();
 
