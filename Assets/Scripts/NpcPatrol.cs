@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,20 +8,28 @@ public class NpcPatrol:MonoBehaviour
     NavMeshAgent agent;
     bool walkPointSet=false;
     public Transform destPoint;
-
+    private DateTime lastCollisionEnter = DateTime.Now; 
+    private float maxCollisionStayTime = 4.0f;
     [SerializeField] LayerMask groudLayer;
-    [SerializeField] float range;
+    private float range= 3.0f;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-    }
-    void Update()
-    {
-        Patrol();
+        InvokeRepeating("Patrol", 0, 0.5f);
+        
     }
     private void OnCollisionEnter(Collision collision)
     {
+        lastCollisionEnter = DateTime.Now;
         walkPointSet = false;
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        if ((DateTime.Now - lastCollisionEnter).TotalSeconds > maxCollisionStayTime)
+        {
+            walkPointSet = false;
+            lastCollisionEnter = DateTime.Now;
+        }
     }
     void Patrol()
     {
@@ -38,13 +48,22 @@ public class NpcPatrol:MonoBehaviour
     }
     void SearchWalkPoint()
     {
-        float randomZ = Random.Range(-range, range);
-        float randomX = Random.Range(-range, range);
-        destPoint.position = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        float randomZ = UnityEngine.Random.Range(0, range) + 2.0f;
+        float randomX = UnityEngine.Random.Range(0, range) + 2.0f;
+        //random set positive or negative
+        randomZ *= UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
+        randomX *= UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
+        destPoint.position = new Vector3(destPoint.position.x + randomX, 0, destPoint.position.z + randomZ);
         Vector3 direction = (destPoint.position - transform.position).normalized;
-        if (Physics.Raycast(destPoint.position, direction, groudLayer))
+        RaycastHit hit;
+        //get raycast hit point
+        if (Physics.Raycast(transform.position, direction, out hit, groudLayer))
         {
+            var hitPoint = hit.point;
+            hitPoint.y = transform.position.y;
+            destPoint.position = hitPoint;
             walkPointSet = true;
         }
+
     }
 }
