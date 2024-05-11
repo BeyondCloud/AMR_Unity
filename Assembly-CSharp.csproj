@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\SpeedLevelToText.cs" />
     <Compile Include="Assets\Scripts\Trash\FollowPlayerCam.cs" />
     <Compile Include="Assets\Scripts\Navigation.cs" />
+    <Compile Include="Assets\Scripts\EnableChildsOnStart.cs" />
     <Compile Include="Assets\LowPolyLight\Effect\Bloom.cs" />
     <Compile Include="Assets\Scripts\PlayerCam.cs" />
     <Compile Include="Assets\Scripts\DebugToText.cs" />
