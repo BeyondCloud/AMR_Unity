@@ -78,7 +78,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
     private NavMeshAgent agent;
     private Navigation navigation;
     private FieldOfView fov;
-    private Follower follower;
     private int moveSpeed = 400;
     private PlayerKeyboardController playerController;
     private Cleaner cleaner;
@@ -90,7 +89,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         navigation = GetComponent<Navigation>();
         fov = GetComponent<FieldOfView>();
-        follower = GetComponent<Follower>();
         playerController = GetComponent<PlayerKeyboardController>();
         cleaner = GetComponent<Cleaner>();
         InvokeRepeating("TimeOutCheck", 0, 1.0f);
@@ -220,7 +218,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
         verticalInput = 0;
         horizontalInput = 0;
         spin_direction = 0;
-        follower.Reset();
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         busyFlag = false;
     }
@@ -361,7 +358,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         if (id != -1)
         {
             Debug.Log("Found " + target_name + " in sight!");
-            navigation.SetTarget(fov.targetsInView[id].transform.position);
+            navigation.SetTarget(fov.targetsInView[id].transform);
         }
         else
         {

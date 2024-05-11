@@ -23,8 +23,10 @@ public class Navigation : MonoBehaviour
 
     public Transform bedroom;
     public Transform charge;
+    private Transform FollowMe;
     private NavMeshAgent agent;
     public PlayerFunctionCortroller playerController;
+    bool stopOnReach = false;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -60,33 +62,28 @@ public class Navigation : MonoBehaviour
             case PlacesEmum.charge:
                 agent.destination = charge.position;
                 break;
+            case PlacesEmum.others:
+                agent.destination = FollowMe.position;
+                break;
         }
-        if (Vector3.Distance(agent.destination, transform.position) <  agent.stoppingDistance+0.1)
+        if (stopOnReach)
         {
-            Debug.Log("Reached destination!");
-            playerController.Reset();
+            if (Vector3.Distance(agent.destination, transform.position) <  agent.stoppingDistance+0.1)
+            {
+                Debug.Log("Reached destination!");
+                playerController.Reset();
+            }
         }
-
-        // if (agent.enabled && !agent.pathPending)
-        // {
-        //     if (agent.remainingDistance <= agent.stoppingDistance)
-        //     {
-        //         // if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-        //         // {
-                
-        //             // places = PlacesEmum.idle;
-        //         // }
-        //     }
-        // }
     }
 
     public void SetIdle()
     {
         places = PlacesEmum.idle;
     }
-    public void SetTarget(string place)
+    public void SetTarget(string place, bool stopOnReach=false)
     {
         agent.enabled = true;
+        this.stopOnReach = stopOnReach;
         Debug.Log("SetTarget: " + place);
         switch (place)
         {
@@ -112,9 +109,18 @@ public class Navigation : MonoBehaviour
                 break;
         }
     }
-    public void SetTarget(Vector3 place)
+    public void SetTarget(Transform place, bool stopOnReach=false)
     {
         agent.enabled = true;
+        this.stopOnReach = stopOnReach;
+        places = PlacesEmum.others;
+        FollowMe = place;
+
+    }
+    public void SetTarget(Vector3 place, bool stopOnReach=false)
+    {
+        agent.enabled = true;
+        this.stopOnReach = stopOnReach;
         places = PlacesEmum.others;
         agent.destination = place;
     }
