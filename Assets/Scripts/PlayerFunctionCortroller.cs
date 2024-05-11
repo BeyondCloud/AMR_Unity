@@ -64,7 +64,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
     [Header("Keybinds")]
     [Header("Ground Check")]
     public float playerHeight;
-    public LayerMask whatIsGround;
     // bool grounded;
 
     public Transform orientation;
