@@ -6,7 +6,7 @@ using System.Collections;
 public class SpeedLevelToText : MonoBehaviour
 {
     private TextMeshProUGUI mText; 
-    public PlayerKeyboardController playerKeyboardController;
+    public PlayerFunctionCortroller playerFunctionCortroller;
     void Awake()
     {
         mText = gameObject.GetComponent<TextMeshProUGUI>();
@@ -14,6 +14,15 @@ public class SpeedLevelToText : MonoBehaviour
     }
     void UpdateText()
     {
-        mText.text = "Speed Level: " + playerKeyboardController.speedLevel;
+        int timeout = playerFunctionCortroller.GetTimeOut();
+        string timeoutText;
+        if (timeout <= 0)
+            timeoutText = "no";
+        else
+            timeoutText = $"{timeout}s";
+        mText.text = (
+             $"Speed Level: {playerFunctionCortroller.GetSpeedLevel()}\n"
+           + $"Timeout: {timeoutText}"
+        );
     }
 }

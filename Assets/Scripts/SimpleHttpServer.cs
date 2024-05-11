@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Data;
 using System.IO;
 using System.Net;
@@ -36,6 +37,7 @@ public class SimpleHttpServer : MonoBehaviour
     bool isPlayerBusy = false;
     private HttpListener listener;
     private bool isRunning = false;
+    private bool blockio = true;
 
     // public string url = "http://localhost:8000/";
 
@@ -248,14 +250,26 @@ public class SimpleHttpServer : MonoBehaviour
                     funcCallArg = GetPostData(request);
                     flag = FuncEnum.set_timeout; // Make sure flag is set last to
                     break;
+                case "/blocking":
+                    Debug.Log("Blocking IO");
+                    blockio = true;
+                    break;
+                case "/nonblocking":
+                    Debug.Log("Non-blocking IO");
+                    blockio = false;
+                    break;
                 default:
                     returnJsonString = "{\"error\":\"404 Not Found\"}";
                     returnCode = 404;
                     break;
+                
             }
         }
-        isPlayerBusy = true;
-        while (isPlayerBusy){}
+        if(blockio)
+        {
+            isPlayerBusy = true;
+            while (isPlayerBusy){}
+        }
         SendResponse(response, returnJsonString, returnCode);
 
         // Continue listening for incoming requests

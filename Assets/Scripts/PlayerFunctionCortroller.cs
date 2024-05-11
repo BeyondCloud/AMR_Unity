@@ -134,7 +134,8 @@ public class PlayerFunctionCortroller : MonoBehaviour
 
     public bool IsBusy()
     {
-        return busyFlag || agent.enabled || routines.Count > 0;
+        var res = busyFlag || agent.enabled || routines.Count > 0;
+        return res;
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -241,6 +242,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     IEnumerator RotateHelper(float degree)
     {
         yield return new WaitForCompletion(_Rotate(degree));
+        Reset();
     }
     public void Rotate(float degree)
     {
@@ -433,8 +435,11 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public int GetSpeedLevel()
     {
-        var speed_level = playerController.speedLevel;
-        return speed_level;
+        return  playerController.speedLevel;
+    }
+    public int GetTimeOut()
+    {
+        return timeOut;
     }
     IEnumerator dance_routine()
     {
