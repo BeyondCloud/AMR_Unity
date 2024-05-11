@@ -1,4 +1,4 @@
-using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,7 +12,8 @@ public class Navigation : MonoBehaviour
         livingRoom = 2,
         bathroom = 3,
         bedroom = 4,
-        charge = 5
+        charge = 5,
+        others = 6
     }
     public PlacesEmum places;
     // Start is called before the first frame update
@@ -110,5 +111,11 @@ public class Navigation : MonoBehaviour
                 playerController.Reset();
                 break;
         }
+    }
+    public void SetTarget(Vector3 place)
+    {
+        agent.enabled = true;
+        places = PlacesEmum.others;
+        agent.destination = place;
     }
 }

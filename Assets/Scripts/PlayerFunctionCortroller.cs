@@ -360,11 +360,13 @@ public class PlayerFunctionCortroller : MonoBehaviour
         int id = getFovNearestObjID(target_name);
         if (id != -1)
         {
-            follower.SetTarget(fov.targetsInView[id].transform);
+            Debug.Log("Found " + target_name + " in sight!");
+            navigation.SetTarget(fov.targetsInView[id].transform.position);
         }
         else
         {
             Debug.Log("No " + target_name + " in sight");
+            busyFlag = false;
         }
     }
     public void Follow()
@@ -418,12 +420,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         }
         centroid /= objectsInMaxAngle.Count;
         //OnGoto
-        follower.SetTarget(centroid);
-        while (follower.isFollowing)
-        {
-            yield return null;
-        }
-        Reset();
+        navigation.SetTarget(centroid);
     }
     public void GoCrowded()
     {
