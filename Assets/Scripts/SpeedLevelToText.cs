@@ -10,13 +10,9 @@ public class SpeedLevelToText : MonoBehaviour
     void Awake()
     {
         mText = gameObject.GetComponent<TextMeshProUGUI>();
+        InvokeRepeating("UpdateText", 0, 0.2f);
     }
-    
-    void Start()
-    {
-    }
-
-    void FixedUpdate()
+    void UpdateText()
     {
         mText.text = "Speed Level: " + playerKeyboardController.speedLevel;
     }
