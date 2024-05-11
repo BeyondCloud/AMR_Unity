@@ -64,6 +64,7 @@ public class SimpleHttpServer : MonoBehaviour
         else
         {
             string string_holder = "";
+            int tmp;
             switch (flag)
             {
                 case FuncEnum.stop:
@@ -114,21 +115,23 @@ public class SimpleHttpServer : MonoBehaviour
                     controller.Find(funcCallArg);
                     break;
                 case FuncEnum.set_speed:
-                    int speed_level;
-                    if(int.TryParse(funcCallArg, out speed_level))
+                    if(int.TryParse(funcCallArg, out tmp))
                     {
                         Debug.Log("Set speed level to " + funcCallArg);
-                        controller.SetSpeedLevel(speed_level);
+                        controller.SetSpeedLevel(tmp);
                     }else
-                    {
-                        Debug.LogError("Invalid speed level: " + funcCallArg);
-                    }
+                        Debug.LogError("Invalid value: " + funcCallArg);
                     break;
                 case FuncEnum.print:
                     Debug.Log(funcCallArg);
                     break;
                 case FuncEnum.set_timeout:
-                    controller.SetTimeout(int.Parse(funcCallArg));
+                    if(int.TryParse(funcCallArg, out tmp))
+                    {
+                        Debug.Log("Set timeout to " + tmp);
+                        controller.SetTimeout(int.Parse(funcCallArg));
+                    }else
+                        Debug.LogError("Invalid value: " + funcCallArg);
                     break;
             }
             flag = FuncEnum.idle;
