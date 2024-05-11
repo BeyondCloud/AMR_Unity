@@ -54,6 +54,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public float spin_direction = 0;
     private float spin_speed = 100;
     public bool stopOnCollision = false;
+    public float waitTimeBeforeStopCollisionCheck = 1.0f;
 
     public float groundDrag;
 
@@ -155,8 +156,12 @@ public class PlayerFunctionCortroller : MonoBehaviour
              return;
         if (stopOnCollision)
         {
-            Debug.Log("Hit something, stopped");
-            Reset();
+            TimeSpan diff = DateTime.Now - lastCommandTime;
+            if (diff.TotalSeconds > waitTimeBeforeStopCollisionCheck)
+            {
+                Debug.Log("Hit something, stopped");
+                Reset();
+            }
         }
     }
 
