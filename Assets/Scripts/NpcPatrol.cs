@@ -17,7 +17,7 @@ public class NpcPatrol:MonoBehaviour
     {
         Patrol();
     }
-    void OnCollisionEnter()
+    private void OnCollisionEnter(Collision collision)
     {
         walkPointSet = false;
     }
