@@ -1,8 +1,11 @@
 using System;
+using System.Data;
 using System.IO;
 using System.Net;
 using System.Text;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class SimpleHttpServer : MonoBehaviour
 {
@@ -25,7 +28,8 @@ public class SimpleHttpServer : MonoBehaviour
         dance = 14,
         find = 15,
         set_speed = 16,
-        print = 17
+        print = 17,
+        set_timeout = 18
 
     }
     public PlayerFunctionCortroller controller;
@@ -110,11 +114,21 @@ public class SimpleHttpServer : MonoBehaviour
                     controller.Find(funcCallArg);
                     break;
                 case FuncEnum.set_speed:
-                    Debug.Log("Set speed level to " + funcCallArg);
-                    controller.SetSpeedLevel(int.Parse(funcCallArg));
+                    int speed_level;
+                    if(int.TryParse(funcCallArg, out speed_level))
+                    {
+                        Debug.Log("Set speed level to " + funcCallArg);
+                        controller.SetSpeedLevel(speed_level);
+                    }else
+                    {
+                        Debug.LogError("Invalid speed level: " + funcCallArg);
+                    }
                     break;
                 case FuncEnum.print:
                     Debug.Log(funcCallArg);
+                    break;
+                case FuncEnum.set_timeout:
+                    controller.SetTimeout(int.Parse(funcCallArg));
                     break;
             }
             flag = FuncEnum.idle;
@@ -226,6 +240,10 @@ public class SimpleHttpServer : MonoBehaviour
                 case "/error":
                     funcCallArg = GetPostData(request);
                     flag = FuncEnum.print; // Make sure flag is set last to avoid race condition
+                    break;
+                case "/set_timeout":
+                    funcCallArg = GetPostData(request);
+                    flag = FuncEnum.set_timeout; // Make sure flag is set last to
                     break;
                 default:
                     returnJsonString = "{\"error\":\"404 Not Found\"}";
