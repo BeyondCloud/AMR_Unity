@@ -67,7 +67,8 @@ public class Navigation : MonoBehaviour
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
                     Debug.Log("Reached destination!");
-                    places = PlacesEmum.idle;
+                    playerController.Reset();
+                    // places = PlacesEmum.idle;
                 }
             }
         }
