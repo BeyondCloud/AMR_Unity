@@ -41,25 +41,33 @@ public class NpcPatrol:MonoBehaviour
         {
             agent.SetDestination(destPoint.position);
         }
-        if (Vector3.Distance(transform.position, destPoint.position) <= 1f)
+        if (Vector3.Distance(transform.position, destPoint.position) <= 2.0f)
         {
             walkPointSet = false;
         }
     }
     void SearchWalkPoint()
     {
-        float randomZ = UnityEngine.Random.Range(0, range) + 2.0f;
-        float randomX = UnityEngine.Random.Range(0, range) + 2.0f;
-        //random set positive or negative
-        randomZ *= UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
-        randomX *= UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
-        destPoint.position = new Vector3(destPoint.position.x + randomX, 0, destPoint.position.z + randomZ);
-        Vector3 direction = (destPoint.position - transform.position).normalized;
-        RaycastHit hit;
+        const float walkRadius = 10;
+        //sample a random point on NavMesh
+        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * walkRadius;
+        randomDirection += transform.position;
+        NavMeshHit hit;
+        NavMesh.SamplePosition(randomDirection, out hit, walkRadius, 1);
+        Vector3 mesh_position = hit.position;
+        walkPointSet = true;
+        // float randomZ = UnityEngine.Random.Range(0, range) + 2.0f;
+        // float randomX = UnityEngine.Random.Range(0, range) + 2.0f;
+        // //random set positive or negative
+        // randomZ *= UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
+        // randomX *= UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
+        // destPoint.position = new Vector3(destPoint.position.x + randomX, 0, destPoint.position.z + randomZ);
+        Vector3 direction = (mesh_position - transform.position).normalized;
+        RaycastHit rayhit;
         //get raycast hit point
-        if (Physics.Raycast(transform.position, direction, out hit, groudLayer))
+        if (Physics.Raycast(transform.position, direction, out rayhit, groudLayer))
         {
-            var hitPoint = hit.point;
+            var hitPoint = rayhit.point;
             hitPoint.y = transform.position.y;
             destPoint.position = hitPoint;
             walkPointSet = true;
