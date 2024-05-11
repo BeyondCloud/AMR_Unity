@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\PlayerKeyboardController.cs" />
     <Compile Include="Assets\Scripts\ThirdPersonCam.cs" />
     <Compile Include="Assets\Scripts\Follower.cs" />
+    <Compile Include="Assets\Scripts\RemoveObstructer.cs" />
     <Compile Include="Assets\Logger\Scripts\Logger.cs" />
     <Compile Include="Assets\Scripts\PlayerFunctionCortroller.cs" />
     <Compile Include="Assets\Scripts\Cleaner.cs" />

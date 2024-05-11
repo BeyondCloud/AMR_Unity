@@ -1827,13 +1827,34 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.053006906, y: 0.025660817, z: 0.023444125}
-  m_Center: {x: 0.00054420636, y: 0.0008635442, z: 0.0019124583}
+  m_Size: {x: 0.053006906, y: 0.011772396, z: 0.023444125}
+  m_Center: {x: 0.0005442071, y: -0.006080662, z: 0.001912458}
 --- !u!4 &322866843 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000014154446392, guid: d87d11194b29e3a4c87503bd09c0a664, type: 3}
   m_PrefabInstance: {fileID: 1569761161}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &322866846
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322866836}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.053006906, y: 0.013797543, z: 0.0053808317}
+  m_Center: {x: 0.0005442071, y: 0.006795171, z: -0.007119197}
 --- !u!4 &364750088 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5288557953422318476, guid: eacce3c5205bb354b9e7c89a629989ab, type: 3}
@@ -3258,6 +3279,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1000011110786804, guid: c90de59bff4939e4bbe4cd9324b0decc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 839008110}
+    - targetCorrespondingSourceObject: {fileID: 1000011110786804, guid: c90de59bff4939e4bbe4cd9324b0decc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 839008116}
   m_SourcePrefab: {fileID: 100100000, guid: c90de59bff4939e4bbe4cd9324b0decc, type: 3}
 --- !u!1 &757174354
 GameObject:
@@ -3658,6 +3682,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000011760555468, guid: c90de59bff4939e4bbe4cd9324b0decc, type: 3}
   m_PrefabInstance: {fileID: 755173521}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &839008116
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839008106}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.073782444, y: 0.015434844, z: 0.0048405225}
+  m_Center: {x: -0.000025293828, y: 0.005252849, z: -0.007099515}
 --- !u!1001 &847942625
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7498,6 +7543,7 @@ GameObject:
   - component: {fileID: 1528516377}
   - component: {fileID: 1528516375}
   - component: {fileID: 1528516374}
+  - component: {fileID: 1528516379}
   m_Layer: 0
   m_Name: PlayerCam
   m_TagString: MainCamera
@@ -7587,6 +7633,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1223174445}
   m_LocalEulerAnglesHint: {x: -39.027, y: 0, z: 0}
+--- !u!114 &1528516379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528516373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7fbabd790af4e44abda8891b12512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1223174445}
+  yOffset: 1
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  debugRay: 0
+  prevHit: []
 --- !u!1 &1531676990
 GameObject:
   m_ObjectHideFlags: 0
@@ -7713,6 +7778,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1000011978301354, guid: d87d11194b29e3a4c87503bd09c0a664, type: 3}
       insertIndex: -1
       addedObject: {fileID: 322866840}
+    - targetCorrespondingSourceObject: {fileID: 1000011978301354, guid: d87d11194b29e3a4c87503bd09c0a664, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 322866846}
   m_SourcePrefab: {fileID: 100100000, guid: d87d11194b29e3a4c87503bd09c0a664, type: 3}
 --- !u!1 &1592965273
 GameObject:
