@@ -47,8 +47,10 @@ public class PlayerFunctionCortroller : MonoBehaviour
     //     error=18
     //     print=17,
     // }
-
+    private const int timeOut = 5; // if negative, no timeout
+    private DateTime lastCommandTime = DateTime.Now; 
     [Header("Movement")]
+    public bool busyFlag = false;
     public float spin_direction = 0;
     private float spin_speed = 100;
     public bool stopOnCollision = false;
@@ -70,7 +72,6 @@ public class PlayerFunctionCortroller : MonoBehaviour
 
     float horizontalInput;
     float verticalInput;
-
     Vector3 moveDirection;
 
     Rigidbody rb;
@@ -82,6 +83,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     private PlayerKeyboardController playerController;
     private Cleaner cleaner;
     public TMPro.TMP_Dropdown dropDown;
+    public bool grounded = false;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -91,8 +93,20 @@ public class PlayerFunctionCortroller : MonoBehaviour
         follower = GetComponent<Follower>();
         playerController = GetComponent<PlayerKeyboardController>();
         cleaner = GetComponent<Cleaner>();
+        InvokeRepeating("TimeOutCheck", 0, 1.0f);
     }
-
+    void TimeOutCheck()
+    {
+        if (IsBusy() && timeOut > 0)
+        {
+            TimeSpan diff = DateTime.Now - lastCommandTime;
+            if (diff.TotalSeconds > timeOut)
+            {
+                Debug.Log("Timeout");
+                Reset();
+            }
+        }
+    }
     private void Update()
     {
         SpeedControl();
@@ -110,7 +124,11 @@ public class PlayerFunctionCortroller : MonoBehaviour
         SpinPlayer();
     }
 
-    public bool grounded = false;
+
+    public bool IsBusy()
+    {
+        return busyFlag || agent.enabled || routines.Count > 0;
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (stopOnCollision)
@@ -171,6 +189,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
         // Debug.Log("Reset!");
         // dropDown.value = 0; // This will make idle unselectable
         // StopAllCoroutines(); // Don't do this, coroutines need to exit gracefully (ex: text fade out)
+        lastCommandTime = DateTime.Now;
         foreach (var routine in routines)
         {
             StopCoroutine(routine);
@@ -186,17 +205,19 @@ public class PlayerFunctionCortroller : MonoBehaviour
         spin_direction = 0;
         follower.Reset();
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-
+        busyFlag = false;
     }
     public void GoForward()
     {
         Reset();
+        busyFlag = true;
         stopOnCollision = true;
         verticalInput = 1;
     }
     public void GoBack()
     {
         Reset();
+        busyFlag = true;
         stopOnCollision = true;
         verticalInput = -1;
     }
@@ -216,12 +237,8 @@ public class PlayerFunctionCortroller : MonoBehaviour
     }
     public void Rotate(float degree)
     {
-        // Debug.Log("A");
         Reset();
-        // Debug.Log("B");
-        var routine = StartCoroutine(RotateHelper(degree));
-        // Debug.Log("Create " + routine.GetHashCode());
-        routines.Add(routine);
+        routines.Add( StartCoroutine(RotateHelper(degree)));
     }
     IEnumerator RotateAndGoHelper(float degree)
     {
@@ -247,17 +264,20 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void SpinRight()
     {
         Reset();
+        busyFlag = true;
         spin_direction = 1;
     }
     public void SpinLeft()
     {
         Reset();
+        busyFlag = true;
         spin_direction = -1;
     }
 
     public void Goto(string place)
     {
         Reset();
+        busyFlag = true;
         agent.enabled = true;
         navigation.SetTarget(place);
     }
@@ -317,6 +337,8 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void Find(string target_name)
     {
         Reset();
+        busyFlag = true;
+        stopOnCollision = true;
         int id = getFovNearestObjID(target_name);
         if (id != -1)
         {
@@ -330,6 +352,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void Follow()
     {
         Reset();
+        busyFlag = true;
         Find("person");
     }
 
@@ -387,6 +410,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void GoCrowded()
     {
         Reset();
+        busyFlag = true;
         routines.Add(StartCoroutine(find_surrounding("person")));
     }
     public int GetBatteryPercentage()
@@ -417,6 +441,7 @@ public class PlayerFunctionCortroller : MonoBehaviour
     public void Dance()
     {
         Reset();
+        busyFlag = true;
         routines.Add(StartCoroutine(dance_routine()));
     }
 

@@ -29,6 +29,7 @@ public class SimpleHttpServer : MonoBehaviour
 
     }
     public PlayerFunctionCortroller controller;
+    bool isPlayerBusy = false;
     private HttpListener listener;
     private bool isRunning = false;
 
@@ -42,12 +43,18 @@ public class SimpleHttpServer : MonoBehaviour
     {
         string url = $"http://{ip}:{port}/";
         StartServer(url);
+        InvokeRepeating("TimeOutCheck", 0, 0.2f);
+    }
+    void TimeOutCheck()
+    {
+        isPlayerBusy = controller.IsBusy();
     }
     private FuncEnum flag = 0;
     private string funcCallArg = "";
     private string returnJsonString = "{\"data\":null}";
     void Update()
     {
+       
         if (flag == FuncEnum.idle)
             return;
         else
@@ -103,6 +110,7 @@ public class SimpleHttpServer : MonoBehaviour
                     controller.Find(funcCallArg);
                     break;
                 case FuncEnum.set_speed:
+                    Debug.Log("Set speed level to " + funcCallArg);
                     controller.SetSpeedLevel(int.Parse(funcCallArg));
                     break;
                 case FuncEnum.print:
@@ -211,7 +219,7 @@ public class SimpleHttpServer : MonoBehaviour
                     flag = FuncEnum._goto; // Make sure flag is set last to avoid race condition
                     break;
                 case "/set_speed":
-                    funcCallArg = GetPostData(request).ToLower();
+                    funcCallArg = GetPostData(request);
                     flag = FuncEnum.set_speed; // Make sure flag is set last to avoid race condition
                     break;
                 case "/print":
@@ -225,6 +233,8 @@ public class SimpleHttpServer : MonoBehaviour
                     break;
             }
         }
+        isPlayerBusy = true;
+        while (isPlayerBusy){}
         SendResponse(response, returnJsonString, returnCode);
 
         // Continue listening for incoming requests
