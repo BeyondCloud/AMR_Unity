@@ -11,7 +11,6 @@ public class NpcPatrol:MonoBehaviour
     private DateTime lastCollisionEnter = DateTime.Now; 
     private float maxCollisionStayTime = 4.0f;
     [SerializeField] LayerMask groudLayer;
-    private float range= 3.0f;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
