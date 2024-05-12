@@ -68,17 +68,10 @@ public class FollowTargetCam : MonoBehaviour
             currentY = Mathf.Clamp(currentY, MIN_ANGLE, MAX_ANGLE);
             rotation = Quaternion.Euler(currentY, currentX, 0);
             cameraTransform.position = target.position + rotation * dir;
-        }else if (Input.GetMouseButtonUp(1)) // Right mouse up
-        {
-            cameraTransform.position = cameraOrigin.position;
-            distance = Vector3.Distance(cameraOrigin.position, target.position);
         }
         else
         {
-            currentY = Vector3.Angle(cameraTransform.position - target.position, -target.forward);
-            currentX = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up); //(0, 0, 1)
-            rotation = Quaternion.Euler(currentY, currentX, 0);
-            cameraTransform.position = target.position + rotation * dir;
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraOrigin.position, Time.deltaTime * 3.0f);
         }
         cameraTransform.LookAt(target.position);
     }
