@@ -1,12 +1,15 @@
 using System;
-using System.Collections.Concurrent;
-using System.Data;
 using System.IO;
 using System.Net;
 using System.Text;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+
+[System.Serializable]
+public class ServerConfig
+{
+    public string serverIP="";
+    public string serverPort="";
+}
 
 public class SimpleHttpServer : MonoBehaviour
 {
@@ -33,6 +36,24 @@ public class SimpleHttpServer : MonoBehaviour
         set_timeout = 18
 
     }
+    ServerConfig LoadConfig()
+    {
+        ServerConfig config = new ServerConfig();
+        string filePath = Path.Combine(Application.dataPath, "config.json");
+        if (File.Exists(filePath))
+        {
+            string data = File.ReadAllText(filePath);
+            // Parse the data as needed, for example, if it's JSON:
+            config = JsonUtility.FromJson<ServerConfig>(data);
+            Debug.Log("Config loaded: " + config.serverIP + ":" + config.serverPort);
+        }
+        // raise an error if the file doesn't exist
+        else
+        {
+            Debug.LogError("Config file not found at: " + filePath);
+        }
+        return config;
+    }
     public PlayerFunctionCortroller controller;
     bool isPlayerBusy = false;
     private HttpListener listener;
@@ -43,12 +64,24 @@ public class SimpleHttpServer : MonoBehaviour
 
     // This will work on Windows, you need to turn off the firewall (local network only)
     // curl -X POST http://<your_IPv4>:8000/goto -d "kitchen"
-    public string ip = "192.168.0.225";
-    public string port = "8000";
+    private string ip; //"192.168.0.225"
+    private string port; //"8000"
     void Start()
     {
-        string url = $"http://{ip}:{port}/";
-        StartServer(url);
+        // string url = $"http://{ip}:{port}/";
+        ServerConfig cfg = LoadConfig();
+        if (cfg.serverIP == "" || cfg.serverPort == "")
+        {
+            Debug.LogError("Unable to start server: Invalid server config");
+            return;
+        }
+        string url = $"http://{cfg.serverIP}:{cfg.serverPort}/";
+        bool success = StartServer(url);
+        if (!success)
+        {
+            Debug.LogError($"Cannot launch server on {url}");
+            return;
+        }
         InvokeRepeating("TimeOutCheck", 0, 0.2f);
     }
     void TimeOutCheck()
@@ -147,7 +180,7 @@ public class SimpleHttpServer : MonoBehaviour
     {
         controller.Goto(place);
     }
-    private void StartServer(string url = "http://localhost:8000/")
+    private bool StartServer(string url = "http://localhost:8000/")
     {
         try
         {
@@ -157,11 +190,13 @@ public class SimpleHttpServer : MonoBehaviour
             isRunning = true;
             Listen();
             Debug.Log("Server started: " + url);
+            return true;
         }
         catch (Exception e)
         {
             Debug.LogError($"Failed to start server: {e.Message}");
         }
+        return false;
     }
 
     private void Listen()

@@ -87,6 +87,7 @@
     <Compile Include="Assets\AurynSky\Gems Ultimate Pack\Scripts\AnimationScript.cs" />
     <Compile Include="Assets\Scripts\FieldOfView.cs" />
     <Compile Include="Assets\Scripts\NPCMovement.cs" />
+    <Compile Include="Assets\Scripts\ToggleVisibility.cs" />
     <Compile Include="Assets\Scripts\SimpleHttpServer.cs" />
   </ItemGroup>
   <ItemGroup>
