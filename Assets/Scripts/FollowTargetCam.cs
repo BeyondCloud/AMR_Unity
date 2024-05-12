@@ -38,10 +38,6 @@ public class FollowTargetCam : MonoBehaviour
     private void Update()
     {
         transform.rotation = target.rotation;
-        if (Input.GetAxis("Mouse ScrollWheel") != 0)
-        {
-            distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity, 1f, 5f);
-        }
         Debug.DrawLine(target.position,target.position + target.forward, Color.red);
     }
     void LateUpdate()
