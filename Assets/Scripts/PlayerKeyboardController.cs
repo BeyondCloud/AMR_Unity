@@ -1,6 +1,9 @@
+using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerKeyboardController : MonoBehaviour
 {
@@ -36,7 +39,9 @@ public class PlayerKeyboardController : MonoBehaviour
     float verticalInput;
     Rigidbody rb;
     private NavMeshAgent agent;
-
+    
+    public UnityEngine.UI.Image TutorialImage;
+    private Coroutine fadeRoutine;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -91,6 +96,34 @@ public class PlayerKeyboardController : MonoBehaviour
             playerController.Reset();
         }
         
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (fadeRoutine != null)
+                StopCoroutine(fadeRoutine);
+            fadeRoutine = StartCoroutine(Fade(TutorialImage, 1.0f));
+        }
+           
+        if (Input.GetKeyUp(KeyCode.T))
+        {
+            if (fadeRoutine != null)
+                StopCoroutine(fadeRoutine);
+            fadeRoutine = StartCoroutine(Fade(TutorialImage, 0.0f));
+        }
+    }
+    IEnumerator Fade(UnityEngine.UI.Image image, float targetAlpha) {
+        Color curColor = image.color;
+        float threshold = 0.01f;
+        targetAlpha = Mathf.Clamp(targetAlpha, 0.0f, 1.0f);
+        while(Mathf.Abs(curColor.a - targetAlpha) > threshold) {
+            curColor.a = Mathf.Lerp(curColor.a, targetAlpha, 5.0f * Time.deltaTime);
+            image.color = curColor;
+            yield return null;
+        }
+        if (targetAlpha <= threshold)
+        {
+            curColor.a = 0.0f;
+            image.color = curColor;
+        }
     }
     public bool grounded = false;
     // private void OnCollisionEnter(Collision collision)
