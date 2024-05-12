@@ -1,8 +1,5 @@
-using Microsoft.Unity.VisualStudio.Editor;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerKeyboardController : MonoBehaviour
